@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+import { execSync } from 'node:child_process';
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
@@ -142,6 +142,7 @@ function createMcpServer(bot: any) {
   registerBlockTools(server, bot);
   registerEntityTools(server, bot);
   registerChatTools(server, bot);
+  registerCommandTools(server); // Add new command tools
   registerFlightTools(server, bot);
 
   return server;
@@ -535,10 +536,33 @@ function registerChatTools(server: McpServer, bot: any) {
     {
       message: z.string().describe("Message to send in chat")
     },
-    async ({ message }): Promise<McpResponse> => {
+    async ({ message }: { message: string }): Promise<McpResponse> => {
       try {
         bot.chat(message);
         return createResponse(`Sent message: "${message}"`);
+      } catch (error) {
+        return createErrorResponse(error as Error);
+      }
+    }
+  );
+}
+
+// ========== Command Tools ==========
+
+function registerCommandTools(server: McpServer) {
+  server.tool(
+    "execute-command",
+    "Execute a Minecraft command with '/' prefix",
+    {
+      command: z.string().describe("The Minecraft command to execute (without the '/' prefix)")
+    },
+    async ({ command }: { command: string }): Promise<McpResponse> => {
+      try {
+        execSync(`mcrcon -H localhost -P 25575 -p minecraft "${command}"`, {
+          stdio: 'inherit',
+          encoding: 'utf-8'
+        });
+        return createResponse(`Executed command: "${command}"`);
       } catch (error) {
         return createErrorResponse(error as Error);
       }
