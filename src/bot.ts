@@ -552,13 +552,13 @@ function registerChatTools(server: McpServer, bot: any) {
 function registerCommandTools(server: McpServer) {
   server.tool(
     "execute-command",
-    "Execute a Minecraft command with '/' prefix",
+    "Execute a Minecraft command",
     {
-      command: z.string().describe("The Minecraft command to execute (without the '/' prefix)")
+      command: z.string().describe("The Minecraft command to execute")
     },
     async ({ command }: { command: string }): Promise<McpResponse> => {
       try {
-        execSync(`mcrcon -H localhost -P 25575 -p minecraft "${command}"`, {
+        execSync(`mcrcon "${command}"`, {
           stdio: 'inherit',
           encoding: 'utf-8'
         });
