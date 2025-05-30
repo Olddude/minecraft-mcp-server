@@ -32,7 +32,7 @@ function buildServer() {
         entryPoints: [
             'src/bot.ts'
         ],
-        bundle: false,
+        bundle: true,
         platform: 'node',
         target: 'node20',
         format: 'cjs',
