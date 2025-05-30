@@ -3,7 +3,7 @@ import mineflayer from 'mineflayer';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
 import { McpResponse } from '@olddude/minecraft-server-java';
 import { createErrorResponse, createResponse } from '../response';
-import { Entity } from 'minecraft-data';
+import { Entity } from 'prismarine-entity';
 
 export function registerEntityTools(server: McpServer, bot: mineflayer.Bot) {
     server.tool(
@@ -17,11 +17,8 @@ export function registerEntityTools(server: McpServer, bot: mineflayer.Bot) {
             try {
                 await Promise.resolve();
                 const entityFilter = (e: Entity) => {
-                    if (!type) {return true;}
-                    if (type === 'player') {return e.type === 'player';}
-                    if (type === 'mob') {return e.type === 'mob';}
-                    const hasEntity = e.name.includes(type.toLowerCase());
-                    return hasEntity;
+                    const name = (e.displayName ?? e.username ?? e.name ?? '').toLowerCase();
+                    return name.includes(type.toLowerCase());
                 };
 
                 const entity = bot.nearestEntity(entityFilter);
@@ -30,7 +27,13 @@ export function registerEntityTools(server: McpServer, bot: mineflayer.Bot) {
                     return createResponse(`No ${type || 'entity'} found within ${maxDistance} blocks`);
                 }
 
-                return createResponse(`Found ${entity.name || (entity as any).username || entity.type} at position (${Math.floor(entity.position.x)}, ${Math.floor(entity.position.y)}, ${Math.floor(entity.position.z)})`);
+                const entityName = entity.name ||
+                    (entity as Entity & { username?: string }).username ||
+                    entity.type;
+                const x = Math.floor(entity.position.x);
+                const y = Math.floor(entity.position.y);
+                const z = Math.floor(entity.position.z);
+                return createResponse(`Found ${entityName} at position (${x}, ${y}, ${z})`);
             } catch (error) {
                 return createErrorResponse(error as Error);
             }

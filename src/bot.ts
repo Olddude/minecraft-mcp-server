@@ -1,5 +1,4 @@
 import mineflayer from 'mineflayer';
-import minecraftData from 'minecraft-data';
 import { pathfinder, Movements } from 'mineflayer-pathfinder';
 
 export function createBot(argv: { host: string, port: number, username: string }): mineflayer.Bot {
@@ -16,8 +15,7 @@ export function createBot(argv: { host: string, port: number, username: string }
 
     bot.once('spawn', () => {
         console.error('Bot has spawned in the world');
-        const mcData = minecraftData(bot.version);
-        const defaultMove = new Movements(bot, mcData);
+        const defaultMove = new Movements(bot);
         bot.pathfinder.setMovements(defaultMove);
         bot.chat('Ai powered bot ready to receive instructions!');
     });
