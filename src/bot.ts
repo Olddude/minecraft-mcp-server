@@ -558,7 +558,8 @@ function registerCommandTools(server: McpServer) {
     },
     async ({ command }: { command: string }): Promise<McpResponse> => {
       try {
-        const normalizedCommand = command.startsWith('/') ? command.slice(1) : command;
+        const slash = '/';
+        const normalizedCommand = !command.startsWith(slash) ? `${slash}${command}` : command;
         execSync(`bin/mcrcon "${normalizedCommand}"`, {
           stdio: 'inherit',
           encoding: 'utf-8'
