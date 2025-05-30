@@ -27,6 +27,6 @@ export function createMcpServer(bot: any) {
 }
 
 export function createMcpServerTransport() {
-    const transport = new StdioServerTransport();
-    return transport;
+  const transport = new StdioServerTransport();
+  return transport;
 }
