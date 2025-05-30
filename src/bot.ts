@@ -558,11 +558,12 @@ function registerCommandTools(server: McpServer) {
     },
     async ({ command }: { command: string }): Promise<McpResponse> => {
       try {
-        execSync(`mcrcon "${command}"`, {
+        const normalizedCommand = command.startsWith('/') ? command.slice(1) : command;
+        execSync(`bin/mcrcon "${normalizedCommand}"`, {
           stdio: 'inherit',
           encoding: 'utf-8'
         });
-        return createResponse(`Executed command: "${command}"`);
+        return createResponse(`Executed command: "${normalizedCommand}"`);
       } catch (error) {
         return createErrorResponse(error as Error);
       }
