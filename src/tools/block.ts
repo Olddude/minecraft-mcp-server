@@ -8,6 +8,59 @@ import type { FaceDirection, FaceOption, McpResponse } from '@olddude/minecraft-
 import { createErrorResponse, createResponse } from '../response';
 
 export function registerBlockTools(server: McpServer, bot: mineflayer.Bot) {
+    // Helper function to prioritize face direction
+    function getPossibleFaces(preferredDirection: FaceDirection): FaceOption[] {
+        const faces: FaceOption[] = [
+            { direction: 'down', vector: new Vec3(0, -1, 0) },
+            { direction: 'north', vector: new Vec3(0, 0, -1) },
+            { direction: 'south', vector: new Vec3(0, 0, 1) },
+            { direction: 'east', vector: new Vec3(1, 0, 0) },
+            { direction: 'west', vector: new Vec3(-1, 0, 0) },
+            { direction: 'up', vector: new Vec3(0, 1, 0) },
+        ];
+
+        // Prioritize the requested face direction
+        if (preferredDirection !== 'down') {
+            const specificFace = faces.find(face => face.direction === preferredDirection);
+            if (specificFace) {
+                faces.unshift(faces.splice(faces.indexOf(specificFace), 1)[0]);
+            }
+        }
+
+        return faces;
+    }
+
+    // Helper function to try placing a block
+    async function tryPlaceBlock(
+        position: Vec3,
+        faces: FaceOption[],
+    ): Promise<string | null> {
+        for (const face of faces) {
+            const referencePos = position.plus(face.vector);
+            const referenceBlock = bot.blockAt(referencePos);
+
+            if (referenceBlock && referenceBlock.name !== 'air') {
+                if (!bot.canSeeBlock(referenceBlock)) {
+                    // Try to move closer to see the block
+                    const goal = new goals.GoalNear(referencePos.x, referencePos.y, referencePos.z, 2);
+                    await bot.pathfinder.goto(goal);
+                }
+
+                await bot.lookAt(position, true);
+
+                try {
+                    await bot.placeBlock(referenceBlock, face.vector.scaled(-1));
+                    return face.direction;
+                } catch (placeError) {
+                    console.error(`Failed with ${face.direction} face: ${(placeError as Error).message}`);
+                    continue;
+                }
+            }
+        }
+
+        return null;
+    }
+
     server.tool(
         'place-block',
         'Place a block at the specified position',
@@ -24,7 +77,17 @@ export function registerBlockTools(server: McpServer, bot: mineflayer.Bot) {
                 'west',
             ]).optional().describe("Direction to place against (default: 'down')"),
         },
-        async ({ x, y, z, faceDirection = 'down' }: { x: number, y: number, z: number, faceDirection?: FaceDirection }): Promise<McpResponse> => {
+        async ({
+            x,
+            y,
+            z,
+            faceDirection = 'down',
+        }: {
+            x: number,
+            y: number,
+            z: number,
+            faceDirection?: FaceDirection
+        }): Promise<McpResponse> => {
             try {
                 const placePos = new Vec3(x, y, z);
                 const blockAtPos = bot.blockAt(placePos);
@@ -32,48 +95,16 @@ export function registerBlockTools(server: McpServer, bot: mineflayer.Bot) {
                     return createResponse(`There's already a block (${blockAtPos.name}) at (${x}, ${y}, ${z})`);
                 }
 
-                const possibleFaces: FaceOption[] = [
-                    { direction: 'down', vector: new Vec3(0, -1, 0) },
-                    { direction: 'north', vector: new Vec3(0, 0, -1) },
-                    { direction: 'south', vector: new Vec3(0, 0, 1) },
-                    { direction: 'east', vector: new Vec3(1, 0, 0) },
-                    { direction: 'west', vector: new Vec3(-1, 0, 0) },
-                    { direction: 'up', vector: new Vec3(0, 1, 0) },
-                ];
+                const possibleFaces = getPossibleFaces(faceDirection);
+                const placedFace = await tryPlaceBlock(placePos, possibleFaces);
 
-                // Prioritize the requested face direction
-                if (faceDirection !== 'down') {
-                    const specificFace = possibleFaces.find(face => face.direction === faceDirection);
-                    if (specificFace) {
-                        possibleFaces.unshift(possibleFaces.splice(possibleFaces.indexOf(specificFace), 1)[0]);
-                    }
+                if (placedFace) {
+                    return createResponse(`Placed block at (${x}, ${y}, ${z}) using ${placedFace} face`);
+                } else {
+                    return createResponse(
+                        `Failed to place block at (${x}, ${y}, ${z}): No suitable reference block found`
+                    );
                 }
-
-                // Try each potential face for placing
-                for (const face of possibleFaces) {
-                    const referencePos = placePos.plus(face.vector);
-                    const referenceBlock = bot.blockAt(referencePos);
-
-                    if (referenceBlock && referenceBlock.name !== 'air') {
-                        if (!bot.canSeeBlock(referenceBlock)) {
-                            // Try to move closer to see the block
-                            const goal = new goals.GoalNear(referencePos.x, referencePos.y, referencePos.z, 2);
-                            await bot.pathfinder.goto(goal);
-                        }
-
-                        await bot.lookAt(placePos, true);
-
-                        try {
-                            await bot.placeBlock(referenceBlock, face.vector.scaled(-1));
-                            return createResponse(`Placed block at (${x}, ${y}, ${z}) using ${face.direction} face`);
-                        } catch (placeError) {
-                            console.error(`Failed to place using ${face.direction} face: ${(placeError as Error).message}`);
-                            continue;
-                        }
-                    }
-                }
-
-                return createResponse(`Failed to place block at (${x}, ${y}, ${z}): No suitable reference block found`);
             } catch (error) {
                 return createErrorResponse(error as Error);
             }
