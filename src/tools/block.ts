@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z as zod } from 'zod';
 import { Vec3 } from 'vec3';
 import mineflayer from 'mineflayer';
 import { goals } from 'mineflayer-pathfinder';
@@ -12,10 +12,10 @@ export function registerBlockTools(server: McpServer, bot: mineflayer.Bot) {
         'place-block',
         'Place a block at the specified position',
         {
-            x: z.number().describe('X coordinate'),
-            y: z.number().describe('Y coordinate'),
-            z: z.number().describe('Z coordinate'),
-            faceDirection: z.enum([
+            x: zod.number().describe('X coordinate'),
+            y: zod.number().describe('Y coordinate'),
+            z: zod.number().describe('Z coordinate'),
+            faceDirection: zod.enum([
                 'up',
                 'down',
                 'north',
@@ -24,7 +24,7 @@ export function registerBlockTools(server: McpServer, bot: mineflayer.Bot) {
                 'west',
             ]).optional().describe("Direction to place against (default: 'down')"),
         },
-        async ({x, y, z, faceDirection = 'down' }: { x: number, y: number, z: number, faceDirection?: FaceDirection }): Promise<McpResponse> => {
+        async ({ x, y, z, faceDirection = 'down' }: { x: number, y: number, z: number, faceDirection?: FaceDirection }): Promise<McpResponse> => {
             try {
                 const placePos = new Vec3(x, y, z);
                 const blockAtPos = bot.blockAt(placePos);
