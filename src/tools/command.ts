@@ -19,7 +19,7 @@ export function registerCommandTools(server: McpServer) {
         const mcrconHost = String(process.env.MCRCON_HOST ?? "localhost");
         const mcrconPort = Number.parseInt(process.env.MCRCON_PORT ?? "25575", 10);
         const mcrconPass = String(process.env.MCRCON_PASS ?? "minecraft");
-        const mcrconCommand = `./bin/mcrcon -H ${mcrconHost} -P ${mcrconPort} -p "${mcrconPass} "${validCommand}"`;
+        const mcrconCommand = `./bin/mcrcon -H ${mcrconHost} -P ${mcrconPort} -p ${mcrconPass} "${validCommand}"`;
         console.debug(`Executing mcrcon binary: "${mcrconCommand}"`);
         execSync(mcrconCommand, {
           stdio: 'inherit',
