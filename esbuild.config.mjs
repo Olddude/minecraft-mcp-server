@@ -30,7 +30,7 @@ function buildServer() {
     const serverOutputDirectory = join(workDir, 'dist');
     esbuild.build({
         entryPoints: [
-            'index.ts'
+            'index.ts',
         ],
         bundle: true,
         platform: 'node',
