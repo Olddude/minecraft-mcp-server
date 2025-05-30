@@ -8,8 +8,8 @@
   },
   "scripts": {
     "prepare": "npm run build",
-    "build": "tsc",
-    "start": "node dist/bot.js",
+    "build": "node -r dotenv/config esbuild.config.mjs",
+    "start": "node -r dotenv/config dist/bot.js",
     "lint": "eslint \"src/**/*.ts\" --max-warnings=100",
     "lint:fix": "eslint \"src/**/*.ts\" --fix"
   },
