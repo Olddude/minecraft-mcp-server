@@ -7,7 +7,6 @@
 
 declare module '@olddude/minecraft-server-java' {
   import type { Vec3 } from 'vec3';
-  import type { Entity } from 'minecraft-data';
 
   type McpResponse = {
     content: ContentItem[];

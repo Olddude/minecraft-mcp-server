@@ -84,9 +84,9 @@ export function registerBlockTools(server: McpServer, bot: mineflayer.Bot) {
         'dig-block',
         'Dig a block at the specified position',
         {
-            x: z.number().describe('X coordinate'),
-            y: z.number().describe('Y coordinate'),
-            z: z.number().describe('Z coordinate'),
+            x: zod.number().describe('X coordinate'),
+            y: zod.number().describe('Y coordinate'),
+            z: zod.number().describe('Z coordinate'),
         },
         async ({ x, y, z }): Promise<McpResponse> => {
             try {
@@ -116,19 +116,23 @@ export function registerBlockTools(server: McpServer, bot: mineflayer.Bot) {
         'get-block-info',
         'Get information about a block at the specified position',
         {
-            x: z.number().describe('X coordinate'),
-            y: z.number().describe('Y coordinate'),
-            z: z.number().describe('Z coordinate'),
+            x: zod.number().describe('X coordinate'),
+            y: zod.number().describe('Y coordinate'),
+            z: zod.number().describe('Z coordinate'),
         },
         async ({ x, y, z }): Promise<McpResponse> => {
             try {
+                await Promise.resolve();
                 const blockPos = new Vec3(x, y, z);
                 const block = bot.blockAt(blockPos);
 
                 if (!block) {
                     return createResponse(`No block information found at position (${x}, ${y}, ${z})`);
                 }
-                return createResponse(`Found ${block.name} (type: ${block.type}) at position (${block.position.x}, ${block.position.y}, ${block.position.z})`);
+                return createResponse(
+                    `Found ${block.name} (type: ${block.type}) at position ` +
+                    `(${block.position.x}, ${block.position.y}, ${block.position.z})`,
+                );
             } catch (error) {
                 return createErrorResponse(error as Error);
             }
@@ -139,11 +143,12 @@ export function registerBlockTools(server: McpServer, bot: mineflayer.Bot) {
         'find-block',
         'Find the nearest block of a specific type',
         {
-            blockType: z.string().describe('Type of block to find'),
-            maxDistance: z.number().optional().describe('Maximum search distance (default: 16)'),
+            blockType: zod.string().describe('Type of block to find'),
+            maxDistance: zod.number().optional().describe('Maximum search distance (default: 16)'),
         },
         async ({ blockType, maxDistance = 16 }): Promise<McpResponse> => {
             try {
+                await Promise.resolve();
                 const mcData = minecraftData(bot.version);
                 const {blocksByName} = mcData;
 
@@ -162,7 +167,9 @@ export function registerBlockTools(server: McpServer, bot: mineflayer.Bot) {
                     return createResponse(`No ${blockType} found within ${maxDistance} blocks`);
                 }
 
-                return createResponse(`Found ${blockType} at position (${block.position.x}, ${block.position.y}, ${block.position.z})`);
+                return createResponse(
+                    `Found ${blockType} at position (${block.position.x}, ${block.position.y}, ${block.position.z})`,
+                );
             } catch (error) {
                 return createErrorResponse(error as Error);
             }
