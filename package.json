@@ -2,7 +2,6 @@
   "name": "minecraft-mcp-server",
   "version": "1.0.0",
   "main": "dist/bot.js",
-  "type": "module",
   "bin": {
     "minecraft-mcp-server": "dist/bot.js"
   },
@@ -10,6 +9,7 @@
     "prepare": "npm run build",
     "build": "node -r dotenv/config esbuild.config.mjs",
     "start": "node -r dotenv/config dist/bot.js",
+    "start:debug": "node --inspect=0.0.0.0:9229 -r dotenv/config -r ts-node/register src/bot.ts",
     "lint": "eslint \"src/**/*.ts\" --max-warnings=100",
     "lint:fix": "eslint \"src/**/*.ts\" --fix"
   },
@@ -31,6 +31,7 @@
     "dotenv": "^16.5.0",
     "esbuild": "^0.25.5",
     "eslint": "^9.27.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },
   "engines": {
