@@ -1,11 +1,13 @@
+// declare module 'mineflayer-pathfinder' {
 
-declare module 'mineflayer-pathfinder' {
-  export class Movements {
-      constructor(bot: Bot, mcData: unknown);
-  }
-}
+//   class Movements {
+//       constructor(bot: Bot, mcData: unknown);
+//   }
+// }
 
 declare module '@olddude/minecraft-server-java' {
+  import type { Vec3 } from 'vec3';
+
   type McpResponse = {
     content: ContentItem[];
     _meta?: Record<string, unknown>;
@@ -40,12 +42,4 @@ declare module '@olddude/minecraft-server-java' {
 
   type Direction = 'forward' | 'back' | 'left' | 'right';
   type FaceDirection = 'up' | 'down' | 'north' | 'south' | 'east' | 'west';
-
-
-  type MinecraftEntity = {
-    type: string;
-    name: string;
-  }
-
-  type EntityFilter = (entity: MinecraftEntity) => boolean;
 }

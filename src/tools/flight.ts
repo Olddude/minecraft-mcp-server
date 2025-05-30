@@ -1,11 +1,12 @@
-import { z } from 'zod';
+import { z as zod } from 'zod';
+import mineflayer from 'mineflayer';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
 import { McpResponse } from '@olddude/minecraft-server-java';
 import { createErrorResponse, createResponse } from '../response';
 import { Vec3 } from 'vec3';
 
 function createCancellableFlightOperation(
-    bot: any,
+    bot: mineflayer.Bot,
     destination: Vec3,
     controller: AbortController,
 ): Promise<boolean> {
@@ -24,7 +25,7 @@ function createCancellableFlightOperation(
                     resolve(true);
                 }
             })
-            .catch((err: any) => {
+            .catch((err: Error) => {
                 if (!aborted) {
                     reject(err);
                 }
@@ -32,14 +33,14 @@ function createCancellableFlightOperation(
     });
 }
 
-export function registerFlightTools(server: McpServer, bot: any) {
+export function registerFlightTools(server: McpServer, bot: mineflayer.Bot) {
     server.tool(
         'fly-to',
         'Make the bot fly to a specific position',
         {
-            x: z.number().describe('X coordinate'),
-            y: z.number().describe('Y coordinate'),
-            z: z.number().describe('Z coordinate'),
+            x: zod.number().describe('X coordinate'),
+            y: zod.number().describe('Y coordinate'),
+            z: zod.number().describe('Z coordinate'),
         },
         async ({ x, y, z }): Promise<McpResponse> => {
             if (!bot.creative) {
@@ -47,7 +48,10 @@ export function registerFlightTools(server: McpServer, bot: any) {
             }
 
             const currentPos = bot.entity.position;
-            console.error(`Flying from (${Math.floor(currentPos.x)}, ${Math.floor(currentPos.y)}, ${Math.floor(currentPos.z)}) to (${Math.floor(x)}, ${Math.floor(y)}, ${Math.floor(z)})`);
+            console.error(
+                `Flying from (${Math.floor(currentPos.x)}, ${Math.floor(currentPos.y)}, ${Math.floor(currentPos.z)}) ` +
+                `to (${Math.floor(x)}, ${Math.floor(y)}, ${Math.floor(z)})`,
+            );
 
             const controller = new AbortController();
             const FLIGHT_TIMEOUT_MS = 20000;
@@ -60,16 +64,17 @@ export function registerFlightTools(server: McpServer, bot: any) {
 
             try {
                 const destination = new Vec3(x, y, z);
-
                 await createCancellableFlightOperation(bot, destination, controller);
-
                 return createResponse(`Successfully flew to position (${x}, ${y}, ${z}).`);
             } catch (error) {
                 if (controller.signal.aborted) {
                     const currentPosAfterTimeout = bot.entity.position;
+                    const flightTimeoutInMs = FLIGHT_TIMEOUT_MS/1000;
                     return createErrorResponse(
-                        `Flight timed out after ${FLIGHT_TIMEOUT_MS/1000} seconds. The destination may be unreachable. ` +
-            `Current position: (${Math.floor(currentPosAfterTimeout.x)}, ${Math.floor(currentPosAfterTimeout.y)}, ${Math.floor(currentPosAfterTimeout.z)})`,
+                        `Flight timed out after ${flightTimeoutInMs} seconds. The destination may be unreachable. ` +
+                        `Current position: (${Math.floor(currentPosAfterTimeout.x)}, ` +
+                        `${Math.floor(currentPosAfterTimeout.y)}, ` +
+                        `${Math.floor(currentPosAfterTimeout.z)})`,
                     );
                 }
 

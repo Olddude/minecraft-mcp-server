@@ -1,18 +1,19 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
-import { z } from 'zod';
+import { z as zod } from 'zod';
 import { InventoryItem, McpResponse } from '@olddude/minecraft-server-java';
 import mineflayer from 'mineflayer';
 import { createErrorResponse, createResponse } from '../response';
 
-export function registerInventoryTools(server: McpServer, bot: any) {
+export function registerInventoryTools(server: McpServer, bot: mineflayer.Bot) {
     server.tool(
         'list-inventory',
         "List all items in the bot's inventory",
         {},
         async (): Promise<McpResponse> => {
             try {
+                await Promise.resolve();
                 const items = bot.inventory.items();
-                const itemList: InventoryItem[] = items.map((item: any) => ({
+                const itemList: InventoryItem[] = items.map((item) => ({
                     name: item.name,
                     count: item.count,
                     slot: item.slot,
@@ -38,13 +39,14 @@ export function registerInventoryTools(server: McpServer, bot: any) {
         'find-item',
         "Find a specific item in the bot's inventory",
         {
-            nameOrType: z.string().describe('Name or type of item to find'),
+            nameOrType: zod.string().describe('Name or type of item to find'),
         },
         async ({ nameOrType }): Promise<McpResponse> => {
             try {
+                await Promise.resolve();
                 const items = bot.inventory.items();
-                const item = items.find((item: any) =>
-                    item.name.includes(nameOrType.toLowerCase()),
+                const item = items.find((inventoryItem: InventoryItem) =>
+                    inventoryItem.name.includes(nameOrType.toLowerCase()),
                 );
 
                 if (item) {
@@ -62,14 +64,14 @@ export function registerInventoryTools(server: McpServer, bot: any) {
         'equip-item',
         'Equip a specific item',
         {
-            itemName: z.string().describe('Name of the item to equip'),
-            destination: z.string().optional().describe("Where to equip the item (default: 'hand')"),
+            itemName: zod.string().describe('Name of the item to equip'),
+            destination: zod.string().optional().describe("Where to equip the item (default: 'hand')"),
         },
         async ({ itemName, destination = 'hand' }): Promise<McpResponse> => {
             try {
                 const items = bot.inventory.items();
-                const item = items.find((item: any) =>
-                    item.name.includes(itemName.toLowerCase()),
+                const item = items.find((inventoryItem: InventoryItem) =>
+                    inventoryItem.name.includes(itemName.toLowerCase()),
                 );
 
                 if (!item) {
