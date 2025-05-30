@@ -30,7 +30,7 @@ function buildServer() {
     const serverOutputDirectory = join(workDir, 'dist');
     esbuild.build({
         entryPoints: [
-            'src/bot.ts'
+            'index.ts'
         ],
         bundle: true,
         platform: 'node',
@@ -45,7 +45,7 @@ function buildServer() {
         legalComments: 'none',
         logLevel: 'info',
         metafile: true,
-        tsconfig: 'tsconfig.json',
+        tsconfig: 'tsconfig.app.json',
     });
 }
 

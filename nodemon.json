@@ -1,0 +1,15 @@
+{
+    "$schema": "https://json.schemastore.org/nodemon.json",
+    "watch": [
+        "."
+    ],
+    "ext": "ts",
+    "ignore": [
+        "coverage",
+        "node_modules",
+        "publish",
+        "tests"
+    ],
+    "cwd": ".",
+    "exec": "npm run build && npm run start:debug"
+}
