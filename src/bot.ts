@@ -560,9 +560,17 @@ function registerCommandTools(server: McpServer) {
       try {
         const slash = '/';
         const validCommand = !command.startsWith(slash) ? `${slash}${command}` : command;
-        execSync(`bin/mcrcon "${validCommand}"`, {
+        console.debug(`Executing command: "${validCommand}`);
+        const mcrconHost = String(process.env.MCRCON_HOST ?? "localhost");
+        const mcrconPort = Number.parseInt(process.env.MCRCON_PORT ?? "25575", 10);
+        const mcrconPass = String(process.env.MCRCON_PASS ?? "minecraft");
+        const mcrconCommand = `./bin/mcrcon -H ${mcrconHost} -P ${mcrconPort} -p "${mcrconPass} "${validCommand}"`;
+        console.debug(`Executing mcrcon binary: "${mcrconCommand}"`);
+        execSync(mcrconCommand, {
           stdio: 'inherit',
-          encoding: 'utf-8'
+          encoding: 'utf-8',
+          cwd: process.cwd(),
+          env: process.env
         });
         return createResponse(`Executed command: "${validCommand}"`);
       } catch (error) {
