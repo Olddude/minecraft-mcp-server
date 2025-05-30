@@ -15,7 +15,7 @@
     "test:ci": "jest --coverage",
     "test": "npm run test:ci -- --watch",
     "build": "node -r dotenv/config esbuild.config.mjs",
-    "start:debug": "node -r dotenv/config -r ts-node/register index.ts",
+    "start:debug": "node --inspect=0.0.0.0:9229 -r dotenv/config -r ts-node/register index.ts",
     "start:release": "node -r dotenv/config dist/index.js",
     "start": "nodemon"
   },
