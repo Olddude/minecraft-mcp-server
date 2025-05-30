@@ -100,11 +100,10 @@ export function registerBlockTools(server: McpServer, bot: mineflayer.Bot) {
 
                 if (placedFace) {
                     return createResponse(`Placed block at (${x}, ${y}, ${z}) using ${placedFace} face`);
-                } else {
-                    return createResponse(
-                        `Failed to place block at (${x}, ${y}, ${z}): No suitable reference block found`
-                    );
                 }
+                return createResponse(
+                    `Failed to place block at (${x}, ${y}, ${z}): No suitable reference block found`,
+                );
             } catch (error) {
                 return createErrorResponse(error as Error);
             }
