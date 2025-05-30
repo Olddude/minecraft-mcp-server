@@ -1,12 +1,13 @@
 import { z } from 'zod';
 import { Vec3 } from 'vec3';
+import mineflayer from 'mineflayer';
 import { goals } from 'mineflayer-pathfinder';
 import minecraftData from 'minecraft-data';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
 import type { FaceDirection, FaceOption, McpResponse } from '@olddude/minecraft-server-java';
 import { createErrorResponse, createResponse } from '../response';
 
-export function registerBlockTools(server: McpServer, bot: any) {
+export function registerBlockTools(server: McpServer, bot: mineflayer.Bot) {
     server.tool(
         'place-block',
         'Place a block at the specified position',
@@ -127,7 +128,6 @@ export function registerBlockTools(server: McpServer, bot: any) {
                 if (!block) {
                     return createResponse(`No block information found at position (${x}, ${y}, ${z})`);
                 }
-
                 return createResponse(`Found ${block.name} (type: ${block.type}) at position (${block.position.x}, ${block.position.y}, ${block.position.z})`);
             } catch (error) {
                 return createErrorResponse(error as Error);

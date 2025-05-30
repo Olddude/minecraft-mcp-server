@@ -1,5 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import mineflayer from 'mineflayer';
 
 import { registerPositionTools } from './tools/position';
 import { registerInventoryTools } from './tools/inventory';
@@ -9,7 +10,7 @@ import { registerEntityTools } from './tools/entity';
 import { registerChatTools } from './tools/chat';
 import { registerCommandTools } from './tools/command';
 
-export function createMcpServer(bot: any) {
+export function createMcpServer(bot: mineflayer.Bot) {
     const server = new McpServer({
         name: 'minecraft-bot',
         version: '1.0.0',

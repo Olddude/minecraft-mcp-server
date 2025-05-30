@@ -48,9 +48,4 @@ declare module '@olddude/minecraft-server-java' {
   }
 
   type EntityFilter = (entity: MinecraftEntity) => boolean;
-
-  type MinecraftBot = {} & {
-    chat: (message: string) => void,
-    nearestEntity: (filter: EntityFilter) => MinecraftEntity;
-  };
 }
