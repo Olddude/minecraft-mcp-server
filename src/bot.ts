@@ -559,12 +559,12 @@ function registerCommandTools(server: McpServer) {
     async ({ command }: { command: string }): Promise<McpResponse> => {
       try {
         const slash = '/';
-        const normalizedCommand = !command.startsWith(slash) ? `${slash}${command}` : command;
-        execSync(`bin/mcrcon "${normalizedCommand}"`, {
+        const validCommand = !command.startsWith(slash) ? `${slash}${command}` : command;
+        execSync(`bin/mcrcon "${validCommand}"`, {
           stdio: 'inherit',
           encoding: 'utf-8'
         });
-        return createResponse(`Executed command: "${normalizedCommand}"`);
+        return createResponse(`Executed command: "${validCommand}"`);
       } catch (error) {
         return createErrorResponse(error as Error);
       }
