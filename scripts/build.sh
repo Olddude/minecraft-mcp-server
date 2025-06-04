@@ -32,3 +32,26 @@ fi
 # Container build
 $CONTAINER_RUNTIME build -t localhost/minecraft-mcp-server:latest -f Dockerfile . \
     --build-arg GITHUB_TOKEN=$GITHUB_TOKEN
+
+# Load image into Minikube if it's running
+if command -v minikube >/dev/null 2>&1 && minikube status >/dev/null 2>&1; then
+    echo "Loading image into Minikube..."
+    if [ "$CONTAINER_RUNTIME" = "podman" ]; then
+        # For Podman: save image and load into Minikube
+        echo "Saving image from Podman and loading into Minikube..."
+        $CONTAINER_RUNTIME save localhost/minecraft-mcp-server:latest | minikube image load -
+    else
+        # For Docker: use minikube image load directly
+        echo "Loading Docker image into Minikube..."
+        minikube image load localhost/minecraft-mcp-server:latest
+    fi
+    echo "Image successfully loaded into Minikube"
+else
+    echo "Minikube not found or not running - skipping image load"
+    echo "To manually load the image later, run:"
+    if [ "$CONTAINER_RUNTIME" = "podman" ]; then
+        echo "  podman save localhost/minecraft-mcp-server:latest | minikube image load -"
+    else
+        echo "  minikube image load localhost/minecraft-mcp-server:latest"
+    fi
+fi
