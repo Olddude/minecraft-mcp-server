@@ -28,6 +28,7 @@
   "scripts": {
     "lint": "eslint . -c eslint.config.mjs --ignore-pattern dist",
     "lint:fix": "npm run lint -- --fix",
+    "test:integration": "node -r dotenv/config integration/integration.test.js",
     "test:ci": "jest --detectOpenHandles --coverage",
     "test": "npm run test:ci -- --watch",
     "build": "node -r dotenv/config esbuild.config.mjs",
