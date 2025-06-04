@@ -4,8 +4,6 @@
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import yargs from 'yargs';
-import { hideBin } from 'yargs/helpers';
 
 import type { MinecraftMcpConfig } from '@minecraft-mcp-server/types';
 
@@ -33,30 +31,11 @@ function parsePackageJson() {
  * @returns Parsed command line arguments.
  */
 function parseCommandLineArgs() {
-    return yargs(hideBin(process.argv))
-        .option('host', {
-            type: 'string',
-            description: 'Minecraft server host',
-            default: defaultMinecraftHost,
-        })
-        .option('port', {
-            type: 'string',
-            description: 'Minecraft server port',
-            default: defaultMinecraftPort,
-        })
-        .option('username', {
-            type: 'string',
-            description: 'Bot username',
-            default: defaultBotUsername,
-        })
-        .option('client', {
-            type: 'boolean',
-            description: 'Run as a client instead of a server',
-            default: defaultClient,
-        })
-        .help()
-        .alias('help', 'h')
-        .parseSync();
+    const args = process.argv.slice(2);
+    const client = args.includes('--client') || args.includes('-c');
+    return {
+        client: client,
+    };
 }
 
 /**
@@ -70,8 +49,8 @@ export function createConfig(): MinecraftMcpConfig {
         name: packageJson.name,
         description: packageJson.description,
         version: packageJson.version,
-        minecraftHost: String(process.env.MINECRAFT_HOST ?? args.host),
-        minecraftPort: Number.parseInt(process.env.MINECRAFT_PORT ?? args.port, defaultParseIntRadix),
+        minecraftHost: String(process.env.MINECRAFT_HOST ?? defaultMinecraftHost),
+        minecraftPort: Number.parseInt(process.env.MINECRAFT_PORT ?? defaultMinecraftPort, defaultParseIntRadix),
         mcrconHost: String(process.env.MCRCON_HOST ?? defaultMcrconHost),
         mcrconPort: Number.parseInt(process.env.MCRCON_PORT ?? defaultMcrconPort, defaultParseIntRadix),
         mcrconPass: String(process.env.MCRCON_PASS ?? defaultMcrconPass),
