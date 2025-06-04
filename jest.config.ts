@@ -6,6 +6,15 @@ const config: Config = {
     testEnvironment: 'node',
     clearMocks: true,
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+    testMatch: [
+        '<rootDir>/tests/**/*.spec.ts',
+    ],
+    testPathIgnorePatterns: [
+        '<rootDir>/dist/',
+        '<rootDir>/coverage/',
+        '<rootDir>/integration/',
+        '<rootDir>/node_modules/',
+    ],
     coverageReporters: ['lcov', 'text', 'html', 'cobertura'],
     reporters: [
         'default',
