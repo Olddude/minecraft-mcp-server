@@ -37,6 +37,8 @@ jobs:
       - run: |
           ./scripts/setup.sh
         name: Setup environment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Node
         uses: actions/setup-node@v4
