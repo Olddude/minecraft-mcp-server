@@ -1,5 +1,13 @@
 replicaCount: 1
 
+env:
+  NODE_ENV: development
+  MINECRAFT_HOST: minecraft-server-java
+  MINECRAFT_PORT: 25565
+  MCRCON_HOST: minecraft-server-java
+  MCRCON_PORT: 25575
+  MCRCON_PASS: minecraft
+
 image:
   repository: localhost/minecraft-mcp-server
   pullPolicy: IfNotPresent
