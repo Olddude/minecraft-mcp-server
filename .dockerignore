@@ -1,0 +1,41 @@
+# Dependencies
+node_modules
+npm-debug.log*
+
+# Testing
+coverage
+test-results.xml
+*.test.js
+*.spec.ts
+tests/
+
+# Development files
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Build artifacts (will be copied from build stage)
+dist
+
+# Integration tests
+integration/
+
+# Modules that should be built in container
+modules/
+
+# Docker
+Dockerfile
+.dockerignore

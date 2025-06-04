@@ -10,7 +10,10 @@
         "ts-node/register",
         "index.ts"
       ],
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PATH": "${workspaceFolder}/dist/bin:${env:PATH}"
+      }
     }
     // "minecraft-npx": {
     //   "command": "npx",
