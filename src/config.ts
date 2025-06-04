@@ -27,7 +27,7 @@ function parsePackageJson() {
 }
 
 /**
- * Parses command line arguments using yargs.
+ * Parses command line arguments.
  * @returns Parsed command line arguments.
  */
 function parseCommandLineArgs() {
