@@ -1,0 +1,29 @@
+{
+  "servers": {
+    "minecraft": {
+      "command": "node",
+      "args": [
+        "--inspect=0.0.0.0:9229",
+        "-r",
+        "dotenv/config",
+        "-r",
+        "ts-node/register",
+        "index.ts"
+      ],
+      "envFile": "${workspaceFolder}/.env"
+    }
+    // "minecraft-npx": {
+    //   "command": "npx",
+    //   "args": [
+    //     "-y",
+    //     "github:olddude/minecraft-mcp-server",
+    //     "--host",
+    //     "localhost",
+    //     "--port",
+    //     "25565",
+    //     "--username",
+    //     "LLMBot"
+    //   ]
+    // }
+  }
+}

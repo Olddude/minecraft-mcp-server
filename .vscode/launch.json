@@ -1,0 +1,43 @@
+{
+  "version": "0.2.0",
+  "inputs": [
+    {
+      "id": "target",
+      "type": "pickString",
+      "description": "Pick target script",
+      "options": [
+        {
+          "label": "Clean",
+          "value": "clean.sh"
+        },
+        {
+          "label": "Setup",
+          "value": "setup.sh"
+        },
+        {
+          "label": "Version",
+          "value": "version.sh"
+        }
+      ],
+      "default": "version.sh"
+    }
+  ],
+  "configurations": [
+    {
+      "type": "bashdb",
+      "request": "launch",
+      "name": "[Debug] Shell",
+      "cwd": "${workspaceFolder}",
+      "program": "${workspaceFolder}/scripts/${input:target}",
+      "args": [],
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "[Debug] Server",
+      "port": 9229,
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}
