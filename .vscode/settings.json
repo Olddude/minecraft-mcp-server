@@ -35,6 +35,10 @@
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.tabSize": 4
   },
+  "[helm]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "prettier.bracketSpacing": false
+  },
   "files.associations": {
     ".env": "dotenv"
   },

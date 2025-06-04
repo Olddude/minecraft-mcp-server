@@ -1,0 +1,58 @@
+# Patterns to ignore when building packages.
+# This supports shell glob matching, relative path matching, and
+# negation (prefixed with !). Only one pattern per line.
+.DS_Store
+# Common VCS dirs
+.git/
+.gitignore
+.bzr/
+.bzrignore
+.hg/
+.hgignore
+.svn/
+# Common backup files
+*.swp
+*.bak
+*.tmp
+*.orig
+*~
+# Various IDEs
+.project
+.idea/
+*.tmproj
+.vscode/
+
+# Own files
+.github/
+.husky/
+.vscode/
+coverage/
+dist/
+docs/
+integration/
+modules/
+node_modules/
+scripts/
+src/
+tests/
+.dockerignore
+.env
+.env.example
+.gitattributes
+.gitignore
+.npmrc
+docker-compose.yml
+Dockerfile
+esbuild.config.mjs
+eslint.config.mjs
+index.ts
+inspector.config.json
+jest.config.ts
+jest.setup.ts
+package-lock.json
+package.json
+test-results.xml
+tsconfig.app.json
+tsconfig.json
+tsconfig.spec.json
+types.d.ts

@@ -45,3 +45,17 @@ npm-debug.log*
 
 # Modules
 modules/
+
+# Infra
+.terraform/
+.terraform.tfstate.lock.info
+.tfplan
+*.tfstate
+*.tfstate.backup
+
+*.kubeconfig.yaml
+test-results.xml
+docker-config.json
+
+*.values.yaml
+!values.yaml
