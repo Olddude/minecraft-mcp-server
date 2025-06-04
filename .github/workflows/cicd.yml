@@ -29,7 +29,7 @@ jobs:
         id: apt-cache
         with:
           path: /var/cache/apt/archives
-          key: ${{ runner.os }}-apt-xorg-${{ hashFiles('.github/workflows/ci.yml') }}
+          key: ${{ runner.os }}-apt-xorg-${{ hashFiles('.github/workflows/cicd.yml') }}
           restore-keys: |
             ${{ runner.os }}-apt-xorg-
             ${{ runner.os }}-apt-
