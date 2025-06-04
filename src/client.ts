@@ -1,7 +1,7 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import type { MinecraftMcpConfig, MinecraftMcpClient, MinecraftClientTransport } from '@minecraft-mcp-server/types';
-
+import { logger } from './logging';
 
 /**
  * Handles process termination signals to gracefully shut down the client.
@@ -54,10 +54,10 @@ export async function runAsClient(config: MinecraftMcpConfig) {
     await client.connect(transport, {
         maxTotalTimeout: 10000, // 10 seconds,
         onprogress: (progress) => {
-            console.info('Client progress:', progress);
+            logger.info('Client progress:', progress);
         },
         onresumptiontoken(token) {
-            console.info('Client resumption token:', token);
+            logger.info('Client resumption token:', token);
         },
         timeout: 5000, // 5 seconds
     });
@@ -72,9 +72,9 @@ export async function runAsClient(config: MinecraftMcpConfig) {
             command: '/time set day',
         },
     });
-    console.info('Tool call response:', response);
+    logger.info('Tool call response:', response);
     const terminationCallback = createClientTerminationCallback(client);
     process.on('SIGTERM', terminationCallback);
-    console.info('Client started. Waiting for server connection...', client);
+    logger.info('Client started. Waiting for server connection...', client);
     return;
 }

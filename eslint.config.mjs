@@ -12,6 +12,7 @@ const config = [
             'types.d.ts',
             'src/**/*.ts',
             'tests/**/*.ts',
+            '**/*.mjs',
         ],
     },
     {
@@ -42,6 +43,7 @@ const config = [
             'no-shadow': ['error', { builtinGlobals: true, hoist: 'all' }],
             'no-debugger': 'error',
             'no-alert': 'error',
+            'no-console': 'error',
             'complexity': ['error', 50],
             'max-depth': ['error', 4],
             'max-params': ['error', 5],
@@ -76,6 +78,19 @@ const config = [
     },
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
+    {
+        files: [
+            'tests/**/*.ts',
+            'jest.setup.ts',
+            '**/*.test.ts',
+            '**/*.spec.ts',
+            'esbuild.config.mjs',
+            '**/*.config.mjs',
+        ],
+        rules: {
+            'no-console': 'off', // Allow console in test files and build scripts
+        },
+    },
 ];
 
 export default config;
