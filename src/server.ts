@@ -3,6 +3,7 @@
  * It allows interaction with a Minecraft server using the Model Context Protocol.
  */
 
+import type { JSONRPCRequest, JSONRPCResponse } from '@modelcontextprotocol/sdk/types';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 
@@ -13,9 +14,8 @@ import type {
 } from '@minecraft-mcp-server/types';
 import { registerPrompts } from './prompts';
 import { registerResources } from './resources';
-import { registerTools } from './tools';
-import { JSONRPCRequest, JSONRPCResponse } from '@modelcontextprotocol/sdk/types';
 import { handleTemplatesListRequest } from './resources/templates/protocol';
+import { registerTools } from './tools';
 
 /**
  * Handles process termination signals to gracefully shut down the bot and server.
