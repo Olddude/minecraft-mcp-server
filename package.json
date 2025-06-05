@@ -7,7 +7,7 @@
   },
   "license": "Apache-2.0",
   "bin": {
-    "mcrcon": "dist/bin/mcrcon",
+    "mcrcon": "bin/mcrcon",
     "minecraft-mcp-server": "index.js"
   },
   "types": "types.d.ts",

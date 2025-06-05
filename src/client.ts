@@ -48,7 +48,6 @@ export function createMcpClientTransport(): MinecraftClientTransport {
  * @param config The application configuration.
  */
 export async function runAsClient(config: MinecraftMcpConfig) {
-    await Promise.resolve(); // Placeholder for any async initialization if needed
     const client: MinecraftMcpClient = createMcpClient(config);
     const transport = createMcpClientTransport();
     await client.connect(transport, {
@@ -69,7 +68,7 @@ export async function runAsClient(config: MinecraftMcpConfig) {
             progressToken: '0',
         },
         arguments: {
-            command: '/time set day',
+            command: 'time set day',
         },
     });
     logger.info('Tool call response:', response);

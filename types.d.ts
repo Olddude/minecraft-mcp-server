@@ -5,6 +5,36 @@ declare module '@minecraft-mcp-server/types' {
   import type { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio';
   import type { Client } from '@modelcontextprotocol/sdk/client/index';
 
+  /**
+   * Logger type for consistent logging across the application
+   */
+  type Logger = {
+    trace(message: string, ...args: unknown[]): void;
+    debug(message: string, ...args: unknown[]): void;
+    info(message: string, ...args: unknown[]): void;
+    warn(message: string, ...args: unknown[]): void;
+    error(message: string, ...args: unknown[]): void;
+    fatal(message: string, ...args: unknown[]): void;
+  };
+
+  /**
+   * Log levels supported by the application
+   */
+  type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
+
+  /**
+   * Logging configuration
+   */
+  type LoggingConfig = {
+    level: LogLevel;
+    enableConsole: boolean;
+    enableFile: boolean;
+    filePattern: string;
+    maxLogSize: string;
+    backups: number;
+    compress: boolean;
+  };
+
   type ResourceTemplate = {
     name: string;
     description: string;

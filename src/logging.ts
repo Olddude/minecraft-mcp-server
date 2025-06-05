@@ -1,47 +1,21 @@
 import log4js from 'log4js';
+import type { Logger, LogLevel, LoggingConfig } from '@minecraft-mcp-server/types';
 
-/**
- * Logger interface for consistent logging across the application
- */
-export interface Logger {
-    trace(message: string, ...args: unknown[]): void;
-    debug(message: string, ...args: unknown[]): void;
-    info(message: string, ...args: unknown[]): void;
-    warn(message: string, ...args: unknown[]): void;
-    error(message: string, ...args: unknown[]): void;
-    fatal(message: string, ...args: unknown[]): void;
-}
-
-/**
- * Log levels supported by the application
- */
-export enum LogLevel {
-    TRACE = 'trace',
-    DEBUG = 'debug',
-    INFO = 'info',
-    WARN = 'warn',
-    ERROR = 'error',
-    FATAL = 'fatal',
-}
-
-/**
- * Logging configuration
- */
-interface LoggingConfig {
-    level: LogLevel;
-    enableConsole: boolean;
-    enableFile: boolean;
-    filePattern: string;
-    maxLogSize: string;
-    backups: number;
-    compress: boolean;
-}
+// Constants for log levels to use in code
+export const LOG_LEVELS = {
+    TRACE: 'trace' as LogLevel,
+    DEBUG: 'debug' as LogLevel,
+    INFO: 'info' as LogLevel,
+    WARN: 'warn' as LogLevel,
+    ERROR: 'error' as LogLevel,
+    FATAL: 'fatal' as LogLevel,
+};
 
 /**
  * Default logging configuration
  */
 const DEFAULT_CONFIG: LoggingConfig = {
-    level: LogLevel.INFO,
+    level: LOG_LEVELS.DEBUG,
     enableConsole: true,
     enableFile: true,
     filePattern: 'logs/minecraft-mcp-server-%d{yyyy-MM-dd}.log',
@@ -115,7 +89,7 @@ function initializeLogging(): void {
 
         categories.error = {
             appenders: ['errorFile', ...(loggingConfig.enableConsole ? ['console'] : [])],
-            level: LogLevel.ERROR,
+            level: LOG_LEVELS.ERROR,
         };
     }
 

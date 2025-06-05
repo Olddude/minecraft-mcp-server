@@ -30,6 +30,7 @@ coverage/
 dist/
 docs/
 integration/
+logs/
 modules/
 node_modules/
 scripts/

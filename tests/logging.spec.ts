@@ -1,4 +1,4 @@
-import { getLogger, logger, getErrorLogger, LogLevel } from '@/src/logging';
+import { getLogger, logger, getErrorLogger, LOG_LEVELS } from '@/src/logging';
 
 describe('Logging Module', () => {
     beforeEach(() => {
@@ -55,14 +55,14 @@ describe('Logging Module', () => {
         });
     });
 
-    describe('LogLevel enum', () => {
+    describe('LOG_LEVELS constants', () => {
         it('should have all expected log levels', () => {
-            expect(LogLevel.TRACE).toBe('trace');
-            expect(LogLevel.DEBUG).toBe('debug');
-            expect(LogLevel.INFO).toBe('info');
-            expect(LogLevel.WARN).toBe('warn');
-            expect(LogLevel.ERROR).toBe('error');
-            expect(LogLevel.FATAL).toBe('fatal');
+            expect(LOG_LEVELS.TRACE).toBe('trace');
+            expect(LOG_LEVELS.DEBUG).toBe('debug');
+            expect(LOG_LEVELS.INFO).toBe('info');
+            expect(LOG_LEVELS.WARN).toBe('warn');
+            expect(LOG_LEVELS.ERROR).toBe('error');
+            expect(LOG_LEVELS.FATAL).toBe('fatal');
         });
     });
 
