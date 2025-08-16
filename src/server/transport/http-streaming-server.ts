@@ -2,7 +2,7 @@ import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { EventEmitter } from 'events';
 import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import type { JSONRPCMessage } from '@modelcontextprotocol/sdk/types.js';
-import { logger } from '@/shared/logging';
+import { logger } from '@/src/shared/logging';
 
 export interface HTTPStreamingServerConfig {
     host?: string;

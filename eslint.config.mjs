@@ -8,7 +8,6 @@ import tseslint from 'typescript-eslint';
 const config = [
     {
         files: [
-            'index.ts',
             'types.d.ts',
             'src/**/*.ts',
             'tests/**/*.ts',

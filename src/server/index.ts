@@ -23,6 +23,6 @@ export { runAsServer } from '@/src/server/app';
 export * from '@/src/server/prompts';
 export * from '@/src/server/resources';
 export * from '@/src/server/tools';
-export * from '@/src/shared/transport/server';
+export * from '@/src/server/transport';
 export * from '@/src/shared/config';
 export * from '@/src/shared/logging';

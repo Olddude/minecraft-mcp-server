@@ -1,7 +1,7 @@
-import { buildingTemplates } from '@/src/resources/templates/building';
-import { generateTemplateDocumentation } from '@/src/resources/templates/documentation';
-import { landscapeTemplates } from '@/src/resources/templates/landscape';
-import { redstoneTemplates } from '@/src/resources/templates/redstone';
+import { buildingTemplates } from '@/src/server/resources/templates/building';
+import { generateTemplateDocumentation } from '@/src/server/resources/templates/documentation';
+import { landscapeTemplates } from '@/src/server/resources/templates/landscape';
+import { redstoneTemplates } from '@/src/server/resources/templates/redstone';
 import {
     getTemplate,
     getTemplatesByCategory,
@@ -10,7 +10,7 @@ import {
     getAllTemplates,
     exportTemplateCommands,
     validateTemplate,
-} from '@/src/resources/templates/utils';
+} from '@/src/server/resources/templates/utils';
 
 describe('Resource Templates', () => {
     describe('Template Collections', () => {

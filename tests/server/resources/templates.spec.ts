@@ -1,5 +1,5 @@
-import { handleTemplatesListRequest } from '@/src/resources/templates/protocol';
-import { getAllTemplates } from '@/src/resources/templates/utils';
+import { handleTemplatesListRequest } from '@/src/server/resources/templates/protocol';
+import { getAllTemplates } from '@/src/server/resources/templates/utils';
 import type { JSONRPCRequest } from '@modelcontextprotocol/sdk/types';
 
 describe('handleTemplatesListRequest', () => {

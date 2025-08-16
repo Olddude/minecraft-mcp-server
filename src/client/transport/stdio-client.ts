@@ -1,6 +1,6 @@
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import type { MinecraftClientTransport } from '@minecraft-mcp-server/types';
-import { logger } from '@/shared/logging';
+import { logger } from '@/src/shared/logging';
 
 export function createStdioClientTransport(): MinecraftClientTransport {
     logger.debug('Creating STDIO client transport');

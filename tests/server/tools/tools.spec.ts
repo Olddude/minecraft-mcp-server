@@ -1,5 +1,5 @@
-import { registerTools } from '@/src/tools';
-import * as toolsModule from '@/src/tools';
+import { registerTools } from '@/src/server/tools';
+import * as toolsModule from '@/src/server/tools';
 
 // Mock the mcrcon command execution
 jest.mock('node:child_process', () => ({

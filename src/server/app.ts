@@ -10,10 +10,10 @@ import type {
     MinecraftMcpServer,
     MinecraftStdioServerTransport,
 } from '@minecraft-mcp-server/types';
-import { registerPrompts } from './prompts';
-import { registerResources } from './resources';
-import { registerTools } from './tools';
-import { createStdioServerTransport, patchStdioTransportForTemplates } from '@/src/shared/transport/server';
+import { registerPrompts } from '@/src/server/prompts';
+import { registerResources } from '@/src/server/resources';
+import { registerTools } from '@/src/server/tools';
+import { createStdioServerTransport, patchStdioTransportForTemplates } from '@/src/server/transport';
 
 /**
  * Handles process termination signals to gracefully shut down the bot and server.

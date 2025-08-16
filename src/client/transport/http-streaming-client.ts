@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import type { JSONRPCMessage } from '@modelcontextprotocol/sdk/types.js';
-import { logger } from '@/shared/logging';
+import { logger } from '@/src/shared/logging';
 
 export interface HTTPStreamingClientConfig {
     url: string;
@@ -26,6 +26,9 @@ export class HTTPStreamingClientTransport extends EventEmitter implements Transp
     async start(): Promise<void> {
         this.controller = new AbortController();
 
+        const { readable, writable } = new TransformStream();
+        this.writer = writable.getWriter();
+
         const response = await fetch(this.config.url, {
             method: 'POST',
             headers: {
@@ -33,11 +36,7 @@ export class HTTPStreamingClientTransport extends EventEmitter implements Transp
                 'Accept': 'application/x-ndjson',
                 ...this.config.headers,
             },
-            body: new ReadableStream({
-                start: (controller) => {
-                    this.writer = controller.getWriter();
-                },
-            }),
+            body: readable,
             signal: this.controller.signal,
         });
 
@@ -72,7 +71,7 @@ export class HTTPStreamingClientTransport extends EventEmitter implements Transp
 
     private async processResponseStream(
         reader: ReadableStreamDefaultReader<Uint8Array>,
-        decoder: TextDecoder,
+        decoder: typeof TextDecoder.prototype,
         initialBuffer: string,
     ): Promise<void> {
         let buffer = initialBuffer;

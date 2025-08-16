@@ -20,6 +20,6 @@ if (require.main === module) {
 }
 
 export { runAsClient } from '@/src/client/app';
-export * from '@/src/shared/transport/client';
+export * from '@/src/client/transport';
 export * from '@/src/shared/config';
 export * from '@/src/shared/logging';

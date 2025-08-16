@@ -1,6 +1,6 @@
 import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
 import type { MinecraftMcpConfig } from '@minecraft-mcp-server/types';
-import { logger } from '@/shared/logging';
+import { logger } from '@/src/shared/logging';
 
 export interface SSEClientConfig {
     url: string;
@@ -9,10 +9,7 @@ export interface SSEClientConfig {
 
 export function createSSEClientTransport(config: SSEClientConfig): SSEClientTransport {
     logger.debug('Creating SSE client transport', { config });
-    const transport = new SSEClientTransport({
-        url: config.url,
-        headers: config.headers,
-    });
+    const transport = new SSEClientTransport(new URL(config.url));
     logger.info('SSE client transport created successfully', { url: config.url });
     return transport;
 }

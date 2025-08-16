@@ -1,8 +1,8 @@
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import type { JSONRPCRequest, JSONRPCResponse } from '@modelcontextprotocol/sdk/types';
 import type { MinecraftStdioServerTransport } from '@minecraft-mcp-server/types';
-import { handleTemplatesListRequest } from '@/server/resources/templates/protocol';
-import { logger } from '@/shared/logging';
+import { handleTemplatesListRequest } from '@/src/server/resources/templates/protocol';
+import { logger } from '@/src/shared/logging';
 
 export function createStdioServerTransport(): MinecraftStdioServerTransport {
     logger.debug('Creating STDIO server transport');
