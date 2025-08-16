@@ -1,7 +1,7 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-import type { MinecraftMcpConfig, MinecraftMcpClient, MinecraftClientTransport } from '@minecraft-mcp-server/types';
+import type { MinecraftMcpConfig, MinecraftMcpClient } from '@minecraft-mcp-server/types';
 import { logger } from './logging';
+import { createStdioClientTransport } from './transport';
 
 /**
  * Handles process termination signals to gracefully shut down the client.
@@ -25,22 +25,6 @@ export function createMcpClient(config: MinecraftMcpConfig): MinecraftMcpClient 
     return client;
 }
 
-export function createMcpClientTransport(): MinecraftClientTransport {
-    const transport: MinecraftClientTransport = new StdioClientTransport({
-        command: 'node',
-        args: [
-            '-r',
-            'dotenv/config',
-            '-r',
-            'ts-node/register',
-            'index.ts',
-        ],
-        cwd: process.cwd(),
-        env: process.env as Record<string, string>,
-        stderr: process.stderr,
-    });
-    return transport;
-}
 
 
 /**
@@ -49,7 +33,7 @@ export function createMcpClientTransport(): MinecraftClientTransport {
  */
 export async function runAsClient(config: MinecraftMcpConfig) {
     const client: MinecraftMcpClient = createMcpClient(config);
-    const transport = createMcpClientTransport();
+    const transport = createStdioClientTransport();
     await client.connect(transport, {
         maxTotalTimeout: 10000, // 10 seconds,
         onprogress: (progress) => {
