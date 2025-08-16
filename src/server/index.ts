@@ -1,4 +1,4 @@
-import { createConfig } from '@/src/shared/config';
+import { createConfig } from './config';
 import { runAsServer } from '@/src/server/app';
 
 /**

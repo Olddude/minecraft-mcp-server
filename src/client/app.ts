@@ -1,6 +1,6 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import type { MinecraftMcpConfig, MinecraftMcpClient } from '@minecraft-mcp-server/types';
-import { logger } from '@/src/shared/logging';
+import { logger } from './logging';
 import { createStdioClientTransport } from '@/src/client/transport/stdio-client';
 
 /**

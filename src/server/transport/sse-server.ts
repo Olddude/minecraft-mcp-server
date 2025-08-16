@@ -1,6 +1,6 @@
 import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
 import type { MinecraftMcpConfig } from '@minecraft-mcp-server/types';
-import { logger } from '@/src/shared/logging';
+import { logger } from '../logging';
 
 export interface SSEServerConfig {
     host?: string;

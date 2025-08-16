@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import type { JSONRPCMessage } from '@modelcontextprotocol/sdk/types.js';
-import { logger } from '@/src/shared/logging';
+import { logger } from '../logging';
 
 export interface HTTPStreamingClientConfig {
     url: string;
