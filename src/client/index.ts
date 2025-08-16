@@ -1,5 +1,5 @@
-import { createConfig } from '@/shared/config';
-import { runAsClient } from '@/client/client';
+import { createConfig } from '@/src/shared/config';
+import { runAsClient } from '@/src/client/client';
 
 /**
  * Client application entry point.
@@ -19,7 +19,7 @@ if (require.main === module) {
     });
 }
 
-export { runAsClient } from '@/client/client';
-export * from '@/shared/transport/client';
-export * from '@/shared/config';
-export * from '@/shared/logging';
+export { runAsClient } from '@/src/client/client';
+export * from '@/src/shared/transport/client';
+export * from '@/src/shared/config';
+export * from '@/src/shared/logging';

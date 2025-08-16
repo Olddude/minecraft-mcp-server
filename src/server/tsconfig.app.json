@@ -5,9 +5,7 @@
     "rootDir": "../..",
     "outDir": "../../dist/server",
     "paths": {
-      "@/src/*": ["./src/*"],
-      "@/shared/*": ["./src/shared/*"],
-      "@/server/*": ["./src/server/*"]
+      "@/src/*": ["./src/*"]
     }
   },
   "include": ["index.ts", "./**/*.ts", "../shared/**/*.ts"],

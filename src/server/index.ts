@@ -1,5 +1,5 @@
-import { createConfig } from '@/shared/config';
-import { runAsServer } from '@/server/server';
+import { createConfig } from '@/src/shared/config';
+import { runAsServer } from '@/src/server/server';
 
 /**
  * Server application entry point.
@@ -19,10 +19,10 @@ if (require.main === module) {
     });
 }
 
-export { runAsServer } from '@/server/server';
-export * from '@/server/prompts';
-export * from '@/server/resources';
-export * from '@/server/tools';
-export * from '@/shared/transport/server';
-export * from '@/shared/config';
-export * from '@/shared/logging';
+export { runAsServer } from '@/src/server/server';
+export * from '@/src/server/prompts';
+export * from '@/src/server/resources';
+export * from '@/src/server/tools';
+export * from '@/src/shared/transport/server';
+export * from '@/src/shared/config';
+export * from '@/src/shared/logging';

@@ -5,9 +5,7 @@
     "rootDir": "../..",
     "outDir": "../../dist/client",
     "paths": {
-      "@/src/*": ["./src/*"],
-      "@/shared/*": ["./src/shared/*"],
-      "@/client/*": ["./src/client/*"]
+      "@/src/*": ["./src/*"]
     }
   },
   "include": ["index.ts", "./**/*.ts", "../shared/**/*.ts"],
