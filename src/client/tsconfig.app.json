@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "../..",
+    "rootDir": "../..",
+    "outDir": "../../dist/client",
+    "paths": {
+      "@/src/*": ["./src/*"],
+      "@/shared/*": ["./src/shared/*"],
+      "@/client/*": ["./src/client/*"]
+    }
+  },
+  "include": ["index.ts", "./**/*.ts", "../shared/**/*.ts"],
+  "exclude": ["../../coverage", "../../node_modules", "../../dist", "../../tests"]
+}
