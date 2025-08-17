@@ -48,12 +48,5 @@
     "markdown": false,
     "scminput": false,
     "dotenv": false
-  },
-  "chat.mcp.serverSampling": {
-    "minecraft-mcp-server/.vscode/mcp.json: minecraft": {
-      "allowedModels": [
-        "copilot/claude-sonnet-4"
-      ]
-    }
   }
 }

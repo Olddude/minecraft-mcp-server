@@ -1,7 +1,12 @@
-.env
-node_modules/
-modules/
-dist/
-logs/
+.claude/
+.github/
+.husky/
+.vscode/
 coverage/
+dist/
+infra/
+logs/
+modules/
+node_modules/
+.env
 test-results.xml
