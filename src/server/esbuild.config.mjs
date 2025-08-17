@@ -1,15 +1,20 @@
-import { cwd, env } from 'node:process';
-import { join } from 'node:path';
+import { env } from 'node:process';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync, cpSync, existsSync } from 'node:fs';
 
 import esbuild from 'esbuild';
+
+// Get the directory path for this ES module
+const filename = fileURLToPath(import.meta.url);
+const currentDir = dirname(filename);
+const workDir = join(currentDir, '../..');
 
 /**
  * Creates the server 'dist' directory by removing any existing one,
  * and then creates a new one.
  */
 function createDistDirectory() {
-    const workDir = cwd();
     const serverOutputDirectory = join(workDir, 'dist/server');
     rmSync(serverOutputDirectory, { recursive: true, force: true });
     mkdirSync(serverOutputDirectory, { recursive: true });
@@ -20,7 +25,6 @@ function createDistDirectory() {
  * Publish the package.json file for the server.
  */
 function publishPackageJson() {
-    const workDir = cwd();
     const serverOutputDirectory = join(workDir, 'dist/server');
     const packageJsonInputFile = join(workDir, 'package.json');
 
@@ -50,7 +54,6 @@ function publishPackageJson() {
  * Copies the types.d.ts file to the server 'dist' directory.
  */
 function copyTypes() {
-    const workDir = cwd();
     const serverOutputDirectory = join(workDir, 'dist/server');
 
     copyFileSync(join(workDir, 'types.d.ts'), join(serverOutputDirectory, 'types.d.ts'));
@@ -61,9 +64,8 @@ function copyTypes() {
  * Copies the docs directory to the server 'dist' directory.
  */
 function copyDocs() {
-    const workDir = cwd();
     const serverDocsDir = join(workDir, 'dist/server/docs');
-    const srcDir = join(workDir, 'docs');
+    const srcDir = join(currentDir, 'docs');
 
     mkdirSync(serverDocsDir, { recursive: true });
     cpSync(srcDir, serverDocsDir, { recursive: true, dereference: true });
@@ -74,7 +76,6 @@ function copyDocs() {
  * Copies the README.md file to the server 'dist' directory.
  */
 function copyReadme() {
-    const workDir = cwd();
     const serverOutputDirectory = join(workDir, 'dist/server');
 
     copyFileSync(join(workDir, 'README.md'), join(serverOutputDirectory, 'README.md'));
@@ -85,7 +86,6 @@ function copyReadme() {
  * Copies the LICENSE file to the server 'dist' directory.
  */
 function copyLicense() {
-    const workDir = cwd();
     const serverOutputDirectory = join(workDir, 'dist/server');
 
     copyFileSync(join(workDir, 'LICENSE'), join(serverOutputDirectory, 'LICENSE'));
@@ -93,11 +93,22 @@ function copyLicense() {
 }
 
 /**
+ * Copies the openapi.json file to the server 'dist' directory.
+ */
+function copyOpenApiSpec() {
+    const serverOutputDirectory = join(workDir, 'dist/server');
+    const openApiSource = join(currentDir, 'openapi.json');
+    const openApiDest = join(serverOutputDirectory, 'openapi.json');
+
+    copyFileSync(openApiSource, openApiDest);
+    console.debug('Copied openapi.json to server directory');
+}
+
+/**
  * Build the server application using esbuild.
  */
 function buildApplication() {
-    const workingDirectory = cwd();
-    const serverOutputDirectory = join(workingDirectory, 'dist/server');
+    const serverOutputDirectory = join(workDir, 'dist/server');
 
     esbuild.build({
         entryPoints: ['src/server/index.ts'],
@@ -108,7 +119,7 @@ function buildApplication() {
         outdir: serverOutputDirectory,
         minify: true,
         sourcemap: env.NODE_ENV !== 'production',
-        sourceRoot: workingDirectory,
+        sourceRoot: workDir,
         treeShaking: true,
         splitting: false, // only works with esm
         legalComments: 'none',
@@ -132,7 +143,7 @@ function buildApplication() {
                 // Handle path mapping for @/src/* -> ./src/*
                 buildContext.onResolve({ filter: /^@\/src\/.*/ }, (args) => {
                     const path = args.path.replace(/^@\/src\//, './src/');
-                    const fullPath = join(workingDirectory, path);
+                    const fullPath = join(workDir, path);
                     const resolvedPath = resolveWithExtension(fullPath);
                     return resolvedPath ? { path: resolvedPath } : undefined;
                 });
@@ -151,6 +162,7 @@ function build() {
     copyDocs();
     copyReadme();
     copyLicense();
+    copyOpenApiSpec();
     buildApplication();
 }
 

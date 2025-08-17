@@ -1,6 +1,6 @@
 import { cwd, env } from 'node:process';
 import { join } from 'node:path';
-import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync, cpSync, existsSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } from 'node:fs';
 
 import esbuild from 'esbuild';
 
@@ -57,18 +57,6 @@ function copyTypes() {
     console.debug('Copied types to client directory');
 }
 
-/**
- * Copies the docs directory to the client 'dist' directory.
- */
-function copyDocs() {
-    const workDir = cwd();
-    const clientDocsDir = join(workDir, 'dist/client/docs');
-    const srcDir = join(workDir, 'docs');
-
-    mkdirSync(clientDocsDir, { recursive: true });
-    cpSync(srcDir, clientDocsDir, { recursive: true, dereference: true });
-    console.debug('Copied docs to client directory');
-}
 
 /**
  * Copies the README.md file to the client 'dist' directory.
@@ -148,7 +136,6 @@ function build() {
     createDistDirectory();
     publishPackageJson();
     copyTypes();
-    copyDocs();
     copyReadme();
     copyLicense();
     buildApplication();

@@ -1,0 +1,811 @@
+{
+  "$schema": "https://spec.openapis.org/oas/v3.0.3/schema/2021-09-28",
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Minecraft MCP Server API",
+    "version": "0.1.0",
+    "description": "Model Context Protocol (MCP) server for Minecraft command execution and resource management",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "contact": {
+      "name": "Minecraft MCP Server",
+      "url": "https://github.com/olddude/minecraft-mcp-server"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "MCP",
+      "description": "Model Context Protocol endpoints"
+    },
+    {
+      "name": "Tools",
+      "description": "Minecraft command execution tools"
+    },
+    {
+      "name": "Resources",
+      "description": "Minecraft server resources and templates"
+    },
+    {
+      "name": "Prompts",
+      "description": "Pre-built Minecraft automation prompts"
+    },
+    {
+      "name": "Health",
+      "description": "Service health monitoring"
+    },
+    {
+      "name": "OpenAI",
+      "description": "OpenAI compatible API endpoints"
+    },
+    {
+      "name": "Documentation",
+      "description": "API documentation endpoints"
+    }
+  ],
+  "paths": {
+    "/": {
+      "post": {
+        "summary": "Execute MCP JSON-RPC requests",
+        "description": "Main endpoint for Model Context Protocol communication",
+        "tags": ["MCP"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MCPRequest"
+              },
+              "examples": {
+                "initialize": {
+                  "summary": "Initialize MCP session",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "initialize",
+                    "params": {
+                      "protocolVersion": "2024-11-05",
+                      "capabilities": {},
+                      "clientInfo": {
+                        "name": "minecraft-mcp-client",
+                        "version": "1.0.0"
+                      }
+                    }
+                  }
+                },
+                "tools-list": {
+                  "summary": "List available tools",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 2,
+                    "method": "tools/list"
+                  }
+                },
+                "tools-call": {
+                  "summary": "Execute a tool",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 3,
+                    "method": "tools/call",
+                    "params": {
+                      "name": "execute-command",
+                      "arguments": {
+                        "command": "time set day"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "MCP response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MCPResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health check endpoint",
+        "description": "Returns the current health status of the MCP server",
+        "tags": ["Health"],
+        "responses": {
+          "200": {
+            "description": "Server health information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tools": {
+      "get": {
+        "summary": "List available Minecraft tools",
+        "description": "Get a list of all available Minecraft MCP tools",
+        "tags": ["Tools"],
+        "responses": {
+          "200": {
+            "description": "List of available tools",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tools": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MinecraftTool"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tools/execute-command": {
+      "post": {
+        "summary": "Execute Minecraft command",
+        "description": "Execute a single Minecraft server command",
+        "tags": ["Tools"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["command"],
+                "properties": {
+                  "command": {
+                    "type": "string",
+                    "description": "Minecraft command to execute",
+                    "example": "time set day"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Command executed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "output": {
+                      "type": "string",
+                      "description": "Command output"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid command",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resources": {
+      "get": {
+        "summary": "List available Minecraft resources",
+        "description": "Get a list of all available Minecraft MCP resources",
+        "tags": ["Resources"],
+        "responses": {
+          "200": {
+            "description": "List of available resources",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resources": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MinecraftResource"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prompts": {
+      "get": {
+        "summary": "List available Minecraft prompts",
+        "description": "Get a list of all available Minecraft MCP prompts",
+        "tags": ["Prompts"],
+        "responses": {
+          "200": {
+            "description": "List of available prompts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "prompts": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MinecraftPrompt"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/models": {
+      "get": {
+        "summary": "List available models (OpenAI compatible)",
+        "description": "Get a list of available models in OpenAI format",
+        "tags": ["OpenAI"],
+        "responses": {
+          "200": {
+            "description": "List of available models",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenAIModelsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/chat/completions": {
+      "post": {
+        "summary": "Create chat completion (OpenAI compatible)",
+        "description": "Create a chat completion that bridges to Minecraft MCP tools",
+        "tags": ["OpenAI"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenAIChatRequest"
+              },
+              "examples": {
+                "minecraft-command": {
+                  "summary": "Execute Minecraft commands",
+                  "value": {
+                    "messages": [
+                      {
+                        "role": "user",
+                        "content": "Execute /time set day and /weather clear"
+                      }
+                    ],
+                    "model": "minecraft-mcp"
+                  }
+                },
+                "minecraft-help": {
+                  "summary": "Get Minecraft help",
+                  "value": {
+                    "messages": [
+                      {
+                        "role": "user",
+                        "content": "How do I build a house in Minecraft?"
+                      }
+                    ],
+                    "model": "minecraft-mcp"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat completion response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenAIChatResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/openapi.json": {
+      "get": {
+        "summary": "OpenAPI specification",
+        "description": "Returns the OpenAPI 3.0 specification for this API",
+        "tags": ["Documentation"],
+        "responses": {
+          "200": {
+            "description": "OpenAPI specification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "OpenAPI 3.0 specification"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MCPRequest": {
+        "type": "object",
+        "required": ["jsonrpc", "method"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "enum": ["2.0"],
+            "description": "JSON-RPC version"
+          },
+          "id": {
+            "oneOf": [
+              {"type": "string"},
+              {"type": "number"}
+            ],
+            "description": "Request identifier"
+          },
+          "method": {
+            "type": "string",
+            "description": "MCP method name",
+            "enum": [
+              "initialize",
+              "tools/list",
+              "tools/call",
+              "resources/list",
+              "resources/read",
+              "prompts/list",
+              "prompts/get"
+            ]
+          },
+          "params": {
+            "type": "object",
+            "description": "Method parameters"
+          }
+        }
+      },
+      "MCPResponse": {
+        "type": "object",
+        "required": ["jsonrpc"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "enum": ["2.0"]
+          },
+          "id": {
+            "oneOf": [
+              {"type": "string"},
+              {"type": "number"}
+            ]
+          },
+          "result": {
+            "type": "object",
+            "description": "Response result"
+          },
+          "error": {
+            "$ref": "#/components/schemas/MCPError"
+          }
+        }
+      },
+      "MCPError": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message"
+          },
+          "data": {
+            "type": "object",
+            "description": "Additional error data"
+          }
+        }
+      },
+      "HealthResponse": {
+        "type": "object",
+        "required": ["status", "timestamp", "service", "version"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["ok", "degraded", "error"],
+            "description": "Service health status"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of health check"
+          },
+          "service": {
+            "type": "string",
+            "description": "Service name"
+          },
+          "version": {
+            "type": "string",
+            "description": "Service version"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["error"],
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Error message"
+          }
+        }
+      },
+      "MinecraftTool": {
+        "type": "object",
+        "required": ["name", "description"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Tool name",
+            "enum": [
+              "execute-command",
+              "execute-sequential-command-batch",
+              "execute-parallel-command-batch"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "Tool description"
+          },
+          "inputSchema": {
+            "type": "object",
+            "description": "Input schema for the tool"
+          }
+        }
+      },
+      "MinecraftResource": {
+        "type": "object",
+        "required": ["uri", "name"],
+        "properties": {
+          "uri": {
+            "type": "string",
+            "description": "Resource URI",
+            "examples": [
+              "minecraft://commands",
+              "minecraft://building-patterns",
+              "minecraft://server-config",
+              "minecraft://block-reference",
+              "minecraft://resource-templates"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "description": "Resource name"
+          },
+          "description": {
+            "type": "string",
+            "description": "Resource description"
+          },
+          "mimeType": {
+            "type": "string",
+            "description": "Content MIME type",
+            "examples": ["text/markdown", "application/json"]
+          }
+        }
+      },
+      "MinecraftPrompt": {
+        "type": "object",
+        "required": ["name", "description"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Prompt name",
+            "enum": [
+              "build-house",
+              "terraform-landscape",
+              "redstone-automation",
+              "command-optimization",
+              "debug-issues",
+              "creative-projects"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "Prompt description"
+          },
+          "arguments": {
+            "type": "array",
+            "description": "Prompt arguments",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "OpenAIModelsResponse": {
+        "type": "object",
+        "required": ["object", "data"],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": ["list"]
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OpenAIModel"
+            }
+          }
+        }
+      },
+      "OpenAIModel": {
+        "type": "object",
+        "required": ["id", "object", "created", "owned_by"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Model identifier"
+          },
+          "object": {
+            "type": "string",
+            "enum": ["model"]
+          },
+          "created": {
+            "type": "integer",
+            "description": "Unix timestamp"
+          },
+          "owned_by": {
+            "type": "string",
+            "description": "Model owner"
+          },
+          "permission": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "root": {
+            "type": "string"
+          },
+          "parent": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "OpenAIChatRequest": {
+        "type": "object",
+        "required": ["messages"],
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OpenAIMessage"
+            },
+            "description": "Chat conversation messages"
+          },
+          "model": {
+            "type": "string",
+            "description": "Model to use for completion",
+            "default": "minecraft-mcp"
+          },
+          "stream": {
+            "type": "boolean",
+            "description": "Whether to stream responses",
+            "default": false
+          },
+          "temperature": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 2,
+            "description": "Sampling temperature"
+          },
+          "max_tokens": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum tokens to generate"
+          }
+        }
+      },
+      "OpenAIMessage": {
+        "type": "object",
+        "required": ["role", "content"],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": ["system", "user", "assistant"],
+            "description": "Message role"
+          },
+          "content": {
+            "type": "string",
+            "description": "Message content"
+          },
+          "tool_calls": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OpenAIToolCall"
+            }
+          }
+        }
+      },
+      "OpenAIToolCall": {
+        "type": "object",
+        "required": ["id", "type", "function"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Tool call identifier"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["function"]
+          },
+          "function": {
+            "type": "object",
+            "required": ["name", "arguments"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Function name"
+              },
+              "arguments": {
+                "type": "string",
+                "description": "Function arguments as JSON string"
+              }
+            }
+          }
+        }
+      },
+      "OpenAIChatResponse": {
+        "type": "object",
+        "required": ["id", "object", "created", "model", "choices"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Completion identifier"
+          },
+          "object": {
+            "type": "string",
+            "enum": ["chat.completion"]
+          },
+          "created": {
+            "type": "integer",
+            "description": "Unix timestamp"
+          },
+          "model": {
+            "type": "string",
+            "description": "Model used"
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OpenAIChoice"
+            }
+          },
+          "usage": {
+            "$ref": "#/components/schemas/OpenAIUsage"
+          }
+        }
+      },
+      "OpenAIChoice": {
+        "type": "object",
+        "required": ["index", "message", "finish_reason"],
+        "properties": {
+          "index": {
+            "type": "integer",
+            "description": "Choice index"
+          },
+          "message": {
+            "$ref": "#/components/schemas/OpenAIMessage"
+          },
+          "finish_reason": {
+            "type": "string",
+            "enum": ["stop", "length", "tool_calls"],
+            "description": "Reason for completion finish"
+          }
+        }
+      },
+      "OpenAIUsage": {
+        "type": "object",
+        "required": ["prompt_tokens", "completion_tokens", "total_tokens"],
+        "properties": {
+          "prompt_tokens": {
+            "type": "integer",
+            "description": "Tokens in prompt"
+          },
+          "completion_tokens": {
+            "type": "integer",
+            "description": "Tokens in completion"
+          },
+          "total_tokens": {
+            "type": "integer",
+            "description": "Total tokens used"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "sessionId": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Mcp-Session-Id",
+        "description": "MCP session identifier for stateful connections"
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Model Context Protocol Specification",
+    "url": "https://modelcontextprotocol.io/docs/specification"
+  }
+}

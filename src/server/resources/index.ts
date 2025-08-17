@@ -14,7 +14,7 @@ import { generateTemplateDocumentation } from './templates/documentation';
  * Helper function to load markdown content from a file
  */
 function loadResourcesDocumentation(filename: string): string {
-    const contentPath = join(process.cwd(), 'docs', 'resources', filename);
+    const contentPath = join(__dirname, '../docs/resources', filename);
     return readFileSync(contentPath, 'utf-8');
 }
 

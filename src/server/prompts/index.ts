@@ -12,7 +12,7 @@ import type { MinecraftMcpServer } from '@minecraft-mcp-server/types';
  * Load markdown content from the prompts content directory
  */
 function loadPromptsDocumentation(filename: string): string {
-    const contentPath = join(process.cwd(), 'docs', 'prompts', filename);
+    const contentPath = join(__dirname, '../docs/prompts', filename);
     return readFileSync(contentPath, 'utf-8').trim();
 }
 
