@@ -1,13 +1,13 @@
 services:
-  server:
+  backend:
     build:
       context: .
       dockerfile: src/backend/Dockerfile
-    image: localhost/minecraft-mcp-server:latest
-    container_name: server
+    image: localhost/minecraft-mcp-backend:latest
+    container_name: backend
     restart: "no"
     ports:
-      - "8080:8080"
+      - "3000:3000"
     entrypoint: ["node"]
     command: ["index.js"]
     environment:
@@ -18,17 +18,17 @@ services:
       - MCRCON_PORT='25575'
       - MCRCON_PASS='minecraft'
 
-  client:
+  frontend:
     build:
       context: .
       dockerfile: src/frontend/Dockerfile
-    image: localhost/minecraft-mcp-client:latest
-    container_name: client
+    image: localhost/minecraft-mcp-frontend:latest
+    container_name: frontend
     restart: "no"
     ports:
-      - "3000:3000"
+      - "3005:3005"
     depends_on:
-      - server
+      - backend
     entrypoint: ["node"]
     command: ["index.js"]
     environment:
