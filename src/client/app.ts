@@ -25,8 +25,6 @@ export function createMcpClient(config: MinecraftMcpConfig): MinecraftMcpClient 
     return client;
 }
 
-
-
 /**
  * Runs the application as Minecraft MCP client based on the provided configuration.
  * @param config The application configuration.

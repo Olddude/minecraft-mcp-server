@@ -21,7 +21,7 @@ export const defaultClient = false;
  * @returns Parsed package.json content.
  */
 function parsePackageJson() {
-    const packageJsonPath = join(__dirname, '..', 'package.json');
+    const packageJsonPath = join(process.cwd(), 'package.json');
     const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
     return packageJson;
 }

@@ -1,25 +1,5 @@
 # Minecraft MCP Server
 
-This project is configured to use GitHub Packages as an npm registry for scoped packages under `@olddude`.
-
-```.npmrc
-//npm.pkg.github.com/:_authToken=<GITHUB_TOKEN>
-@olddude:registry=https://npm.pkg.github.com
-```
-
-## Permissions
-
-The repository needs the following permissions for GitHub Actions:
-
-- `contents: read` - To checkout code
-- `packages: write` - To publish packages
-
-## Environment Variables
-
-The following secrets/tokens are used:
-
-- `GITHUB_TOKEN` - Automatically provided by GitHub Actions for authentication
-
 ## JSON RPC
 
 ```bash
