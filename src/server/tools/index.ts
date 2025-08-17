@@ -8,17 +8,8 @@ import { z as zod } from 'zod';
 
 import type { MinecraftMcpConfig, McpResponse, MinecraftMcpServer } from '@minecraft-mcp-server/types';
 
-import { createResponse, createErrorResponse } from './response';
-
-/**
- * Helper function to normalize a Minecraft command by removing leading slash if present.
- * @param command - The raw command string
- * @returns The normalized command without leading slash
- */
-function normalizeCommand(command: string): string {
-    const slash = '/';
-    return command.startsWith(slash) ? command.substring(1) : command;
-}
+import { createMcpResponse, createMcpErrorResponse } from '../models/mcp';
+import { normalizeCommand } from '../helpers/normalize-command';
 
 /**
  * Helper function to execute a single Minecraft command via mcrcon.
@@ -26,7 +17,7 @@ function normalizeCommand(command: string): string {
  * @param config - The server configuration containing mcrcon details
  * @returns Promise that resolves with the command output
  */
-function executeMinecraftCommand(command: string, config: MinecraftMcpConfig): Promise<string> {
+function minecraftCommand(command: string, config: MinecraftMcpConfig): Promise<string> {
     return new Promise((resolve, reject) => {
         try {
             const normalizedCommand = normalizeCommand(command);
@@ -56,7 +47,7 @@ function executeMinecraftCommand(command: string, config: MinecraftMcpConfig): P
  * @param config - The server configuration
  * @returns Promise that resolves with execution results
  */
-async function executeCommandsSequential(
+async function minecraftCommandsSequential(
     commands: string[],
     config: MinecraftMcpConfig,
 ): Promise<{ executed: Array<{ command: string; output: string }>; failed: string[] }> {
@@ -65,7 +56,7 @@ async function executeCommandsSequential(
 
     for (const command of commands) {
         try {
-            const output = await executeMinecraftCommand(command, config);
+            const output = await minecraftCommand(command, config);
             executed.push({ command: normalizeCommand(command), output });
         } catch {
             failed.push(normalizeCommand(command));
@@ -81,12 +72,12 @@ async function executeCommandsSequential(
  * @param config - The server configuration
  * @returns Promise that resolves with execution results
  */
-async function executeCommandsParallel(
+async function minecraftCommandsParallel(
     commands: string[],
     config: MinecraftMcpConfig,
 ): Promise<{ executed: Array<{ command: string; output: string }>; failed: string[] }> {
     const results = await Promise.allSettled(
-        commands.map(command => executeMinecraftCommand(command, config)),
+        commands.map(command => minecraftCommand(command, config)),
     );
 
     const executed: Array<{ command: string; output: string }> = [];
@@ -118,11 +109,11 @@ export function registerTools(server: MinecraftMcpServer, config: MinecraftMcpCo
         },
         async ({ command }: { command: string }): Promise<McpResponse> => {
             try {
-                const output = await executeMinecraftCommand(command, config);
+                const output = await minecraftCommand(command, config);
                 const commandName = normalizeCommand(command);
-                return createResponse(`Executed command: "${commandName}"\nResult: ${output}`);
+                return createMcpResponse(`Executed command: "${commandName}"\nResult: ${output}`);
             } catch (error) {
-                return createErrorResponse(error as Error);
+                return createMcpErrorResponse(error as Error);
             }
         },
     );
@@ -137,10 +128,10 @@ export function registerTools(server: MinecraftMcpServer, config: MinecraftMcpCo
         async ({ commands }: { commands: string[] }): Promise<McpResponse> => {
             try {
                 if (commands.length === 0) {
-                    return createResponse('No commands provided');
+                    return createMcpResponse('No commands provided');
                 }
 
-                const { executed, failed } = await executeCommandsSequential(commands, config);
+                const { executed, failed } = await minecraftCommandsSequential(commands, config);
 
                 let message = 'Sequential batch execution completed.\n';
                 message += `Successfully executed ${executed.length} commands:\n`;
@@ -152,9 +143,9 @@ export function registerTools(server: MinecraftMcpServer, config: MinecraftMcpCo
                     message += `\nFailed to execute ${failed.length} commands: [${failed.join(', ')}]`;
                 }
 
-                return createResponse(message);
+                return createMcpResponse(message);
             } catch (error) {
-                return createErrorResponse(error as Error);
+                return createMcpErrorResponse(error as Error);
             }
         },
     );
@@ -169,10 +160,10 @@ export function registerTools(server: MinecraftMcpServer, config: MinecraftMcpCo
         async ({ commands }: { commands: string[] }): Promise<McpResponse> => {
             try {
                 if (commands.length === 0) {
-                    return createResponse('No commands provided');
+                    return createMcpResponse('No commands provided');
                 }
 
-                const { executed, failed } = await executeCommandsParallel(commands, config);
+                const { executed, failed } = await minecraftCommandsParallel(commands, config);
 
                 let message = 'Parallel batch execution completed.\n';
                 message += `Successfully executed ${executed.length} commands:\n`;
@@ -184,9 +175,9 @@ export function registerTools(server: MinecraftMcpServer, config: MinecraftMcpCo
                     message += `\nFailed to execute ${failed.length} commands: [${failed.join(', ')}]`;
                 }
 
-                return createResponse(message);
+                return createMcpResponse(message);
             } catch (error) {
-                return createErrorResponse(error as Error);
+                return createMcpErrorResponse(error as Error);
             }
         },
     );

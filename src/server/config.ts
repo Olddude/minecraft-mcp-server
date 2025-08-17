@@ -1,11 +1,5 @@
-/**
- * This module provides configuration for the application.
- */
-
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
-
 import type { MinecraftMcpConfig } from '@minecraft-mcp-server/types';
+import { parsePackageJson } from './helpers/parse-package-json';
 
 export const defaultParseIntRadix = 10;
 export const defaultMinecraftHost = 'localhost';
@@ -14,16 +8,6 @@ export const defaultBotUsername = 'LLMBot';
 export const defaultMcrconHost = defaultMinecraftHost;
 export const defaultMcrconPort = '25575';
 export const defaultMcrconPass = 'minecraft';
-
-/**
- * Parses the package.json file to extract application metadata.
- * @returns Parsed package.json content.
- */
-function parsePackageJson() {
-    const packageJsonPath = join(process.cwd(), 'package.json');
-    const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
-    return packageJson;
-}
 
 /**
  * Creates a configuration object for the application.

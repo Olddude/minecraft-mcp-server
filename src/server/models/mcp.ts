@@ -10,7 +10,7 @@ import type { McpResponse } from '@minecraft-mcp-server/types';
  * @param text - The text content to include in the response.
  * @returns A McpResponse object containing the text content.
  */
-export function createResponse(text: string): McpResponse {
+export function createMcpResponse(text: string): McpResponse {
     return {
         content: [{ type: 'text', text }],
     };
@@ -21,7 +21,7 @@ export function createResponse(text: string): McpResponse {
  * @param error - An error object or a string representing an error message.
  * @returns A McpResponse object indicating an error, with the error message included in the content.
  */
-export function createErrorResponse(error: Error | string): McpResponse {
+export function createMcpErrorResponse(error: Error | string): McpResponse {
     const errorMessage = typeof error === 'string' ? error : error.message;
     return {
         content: [{ type: 'text', text: `Failed: ${errorMessage}` }],
