@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { Server as HttpServer } from 'http';
 import express from 'express';
@@ -5,6 +6,8 @@ import cors from 'cors';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
 import { randomUUID } from 'node:crypto';
 
 import type {
@@ -147,14 +150,64 @@ export async function runApplication(config: MinecraftMcpConfig) {
     registerPrompts(server);
     registerResources(server);
     registerTools(server, config);
-    const transport = createHttpStreamingTransport();
 
-    // Create HTTP server to handle requests
-    const httpServer = createHttpServer(transport, config);
+    const transportType = process.env.MCP_TRANSPORT || 'http-streaming';
 
-    const terminationCallback = createServerTerminationCallback(server, transport, httpServer);
-    process.on('SIGTERM', terminationCallback);
-    process.on('SIGINT', terminationCallback);
+    switch (transportType) {
+    case 'stdio':
+        logger.info('Starting MCP server with stdio transport');
+        const stdioTransport = new StdioServerTransport();
+        process.on('SIGTERM', () => {
+            server.close();
+            process.exit(0);
+        });
+        process.on('SIGINT', () => {
+            server.close();
+            process.exit(0);
+        });
+        await server.connect(stdioTransport);
+        break;
 
-    await server.connect(transport);
+    case 'sse':
+        logger.info('Starting MCP server with SSE transport');
+        const sseApp = express();
+        sseApp.use(cors());
+
+        let sseTransport: SSEServerTransport;
+        sseApp.get('/sse', (req, res) => {
+            sseTransport = new SSEServerTransport('/sse', res);
+            server.connect(sseTransport).catch(error => {
+                logger.error('Failed to connect SSE transport:', error);
+            });
+        });
+
+        const sseServer = sseApp.listen(3000, () => {
+            logger.info('MCP SSE server listening on port 3000');
+        });
+
+        process.on('SIGTERM', () => {
+            server.close();
+            if (sseTransport) {sseTransport.close();}
+            sseServer.close();
+            process.exit(0);
+        });
+        process.on('SIGINT', () => {
+            server.close();
+            if (sseTransport) {sseTransport.close();}
+            sseServer.close();
+            process.exit(0);
+        });
+        break;
+
+    case 'http-streaming':
+    default:
+        logger.info('Starting MCP server with HTTP streaming transport (default)');
+        const transport = createHttpStreamingTransport();
+        const httpServer = createHttpServer(transport, config);
+        const terminationCallback = createServerTerminationCallback(server, transport, httpServer);
+        process.on('SIGTERM', terminationCallback);
+        process.on('SIGINT', terminationCallback);
+        await server.connect(transport);
+        break;
+    }
 }

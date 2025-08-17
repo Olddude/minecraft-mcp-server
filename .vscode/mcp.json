@@ -3,13 +3,14 @@
     "minecraft": {
       "command": "npm",
       "cwd": "${workspaceFolder}",
+      "type": "stdio",
       "args": [
         "run",
         "start:backend:debug"
       ],
       "envFile": "${workspaceFolder}/.env",
       "env": {
-        "PATH": "${workspaceFolder}/dist/bin:${env:PATH}"
+        "MCP_TRANSPORT": "stdio"
       }
     }
   }
