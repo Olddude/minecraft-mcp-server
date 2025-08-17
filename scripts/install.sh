@@ -26,7 +26,9 @@ if [ -z "$2" ]; then
     exit 1
 fi
 
-helm install minecraft-mcp-server . --kubeconfig "$1" --values "$2" \
+cd "$root_dir_path/infra/k8s"
+
+helm upgrade minecraft-mcp-server . --install --kubeconfig "$1" --values "$2" \
     --set env.NODE_ENV="$NODE_ENV" \
     --set env.MINECRAFT_HOST="$MINECRAFT_HOST" \
     --set env.MINECRAFT_PORT="$MINECRAFT_PORT" \

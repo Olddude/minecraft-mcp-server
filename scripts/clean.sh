@@ -16,7 +16,7 @@ if [ -f .env ]; then
     set +a
 fi
 
-rm -rf "$root_dir_path/dist"
-rm -rf "$root_dir_path/modules"
 rm -rf "$root_dir_path/coverage"
+rm -rf "$root_dir_path/dist"
+rm -rf "$root_dir_path/logs"
 rm -f "$root_dir_path/test-results.xml"

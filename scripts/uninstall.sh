@@ -21,4 +21,6 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
+cd "$root_dir_path/infra/k8s"
+
 helm uninstall minecraft-mcp-server --kubeconfig "$1"
