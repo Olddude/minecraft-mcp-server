@@ -12,7 +12,7 @@ import { minecraftCommandsSequential } from '@/src/backend/helpers/minecraft-com
 export function registerMinecraftSequentialBatchTool(server: MinecraftMcpServer, config: MinecraftMcpConfig): void {
     server.tool(
         'minecraft-sequential-command-batch',
-        'Minecraft commands executed sequentially',
+        'Minecraft commands executed in sequence',
         {
             commands: zod.array(zod.string()).describe('Array of Minecraft commands to execute in sequence'),
         },

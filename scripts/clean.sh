@@ -19,4 +19,7 @@ fi
 rm -rf "$root_dir_path/coverage"
 rm -rf "$root_dir_path/dist"
 rm -rf "$root_dir_path/logs"
+rm -rf "$root_dir_path/modules"
+rm -rf "$root_dir_path/node_modules"
+rm -f "$root_dir_path/.env"
 rm -f "$root_dir_path/test-results.xml"
