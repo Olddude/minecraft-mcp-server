@@ -3,23 +3,9 @@
   "inputs": [
     {
       "id": "target",
-      "type": "pickString",
-      "description": "Pick target script",
-      "options": [
-        {
-          "label": "Clean",
-          "value": "clean.sh"
-        },
-        {
-          "label": "Setup",
-          "value": "setup.sh"
-        },
-        {
-          "label": "Version",
-          "value": "version.sh"
-        }
-      ],
-      "default": "version.sh"
+      "type": "promptString",
+      "description": "Relative target file path",
+      "default": ""
     }
   ],
   "configurations": [
@@ -28,8 +14,10 @@
       "request": "launch",
       "name": "[Debug] Shell",
       "cwd": "${workspaceFolder}",
-      "program": "${workspaceFolder}/scripts/${input:target}",
-      "args": [],
+      "program": "${workspaceFolder}/scripts/kill.sh",
+      "args": [
+        "3000"
+      ],
       "internalConsoleOptions": "openOnSessionStart"
     },
     {

@@ -1,0 +1,7 @@
+.env
+node_modules/
+modules/
+dist/
+logs/
+coverage/
+test-results.xml

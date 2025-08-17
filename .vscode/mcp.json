@@ -1,14 +1,11 @@
 {
   "servers": {
     "minecraft": {
-      "command": "node",
+      "command": "npm",
+      "cwd": "${workspaceFolder}",
       "args": [
-        "--inspect=0.0.0.0:9229",
-        "-r",
-        "dotenv/config",
-        "-r",
-        "ts-node/register",
-        "index.ts"
+        "run",
+        "start:backend:debug"
       ],
       "envFile": "${workspaceFolder}/.env",
       "env": {

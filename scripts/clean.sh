@@ -10,10 +10,6 @@ if [ "$(pwd)" != "$root_dir_path" ]; then
     cd "$root_dir_path"
 fi
 
-if [ -f .nvmrc ]; then
-    nvm use
-fi
-
 if [ -f .env ]; then
     set -a
     source .env
