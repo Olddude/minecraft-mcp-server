@@ -103,8 +103,8 @@ MINECRAFT_PORT=25565
 
 The server provides three tools for Minecraft command execution:
 
-1. **execute-command**: Single command execution
-2. **execute-sequential-command-batch**: Commands executed in order
-3. **execute-parallel-command-batch**: Commands executed simultaneously
+1. **minecraft-command**: Single command execution
+2. **minecraft-sequential-command-batch**: Commands executed in order
+3. **minecraft-parallel-command-batch**: Commands executed simultaneously
 
-Always test commands with `execute-command` before using batch operations.
+Always test commands with `minecraft-command` before using batch operations.
