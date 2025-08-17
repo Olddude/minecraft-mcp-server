@@ -1,4 +1,4 @@
-import { createConfig } from './config';
+import { createConfig } from '@/src/server/config';
 import { runAsServer } from '@/src/server/app';
 
 /**

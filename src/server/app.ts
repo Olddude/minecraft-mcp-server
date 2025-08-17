@@ -50,9 +50,6 @@ function createHttpStreamingTransport(config?: HTTPStreamingConfig): MinecraftHt
     return transport as MinecraftHttpServerTransport;
 }
 
-
-
-
 function createHttpServer(
     transport: MinecraftHttpServerTransport,
     config: MinecraftMcpConfig,
@@ -99,6 +96,7 @@ function createHttpServer(
         logger.error('Express error:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     });
+
     const server = app.listen(port, () => {
         logger.info(`Minecraft MCP server listening on port ${port}`);
         logger.info([
@@ -115,9 +113,11 @@ function createHttpServer(
             `  POST   http://localhost:${port}/v1/chat/completions - OpenAI compatible chat`,
         ].join('\n'));
     });
+
     server.on('error', (error) => {
         logger.error('Express server error:', error);
     });
+
     return server;
 }
 
@@ -153,8 +153,6 @@ export function createMcpServer(config: MinecraftMcpConfig): MinecraftMcpServer 
     });
     return server as MinecraftMcpServer;
 }
-
-
 
 /**
  * Runs the application as Minecraft MCP server based on the provided configuration.
