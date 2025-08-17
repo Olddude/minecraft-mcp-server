@@ -36,9 +36,6 @@ test-results.xml
 .npmrc.local
 node_modules/
 
-# VS Code
-.vscode/
-
 # Logs
 logs/
 *.log

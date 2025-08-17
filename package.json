@@ -35,7 +35,9 @@
     "start:backend:debug": "node -r tsconfig-paths/register -r ts-node/register -r dotenv/config src/backend/index.ts",
     "start:backend:release": "node -r dotenv/config dist/backend/index.js",
     "start:frontend:debug": "node -r tsconfig-paths/register -r ts-node/register -r dotenv/config src/frontend/index.ts",
-    "start:frontend:release": "node -r dotenv/config dist/frontend/index.js"
+    "start:frontend:release": "node -r dotenv/config dist/frontend/index.js",
+    "inspect:backend:debug": "npx @modelcontextprotocol/inspector --config mcp-inspector.config.json --server minecraft-backend-debug",
+    "inspect:backend:release": "npx @modelcontextprotocol/inspector --config mcp-inspector.config.json --server minecraft-backend-release"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.11.4",

@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "minecraft-backend-debug": {
+      "command": "node",
+      "args": [
+        "-r", "tsconfig-paths/register",
+        "-r", "ts-node/register", 
+        "-r", "dotenv/config",
+        "src/backend/index.ts"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    "minecraft-backend-release": {
+      "command": "node",
+      "args": [
+        "-r", "dotenv/config",
+        "dist/backend/index.js"
+      ],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}
