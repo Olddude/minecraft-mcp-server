@@ -17,6 +17,8 @@ const config = [
     {
         ignores: [
             'coverage',
+            'dist',
+            'logs',
             'node_modules',
             'publish',
         ],

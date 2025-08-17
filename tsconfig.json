@@ -2,7 +2,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": ".",
-    "outDir": "./dist",
     "lib": ["ESNext"],
     "target": "ES2022",
     "module": "CommonJS",
@@ -14,5 +13,7 @@
     "paths": {
       "@/src/*": ["./src/*"]
     }
-  }
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["coverage", "dist", "logs", "modules", "node_modules"]
 }
