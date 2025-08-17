@@ -29,6 +29,74 @@ export interface HTTPStreamingConfig {
     corsOrigins?: string[];
 }
 
+/**
+ * Creates and configures an Express application with middleware and routes.
+ * @param config The Minecraft MCP configuration.
+ * @param transport The HTTP transport for handling MCP requests.
+ * @param port The port number for the server (used in OpenAPI spec).
+ * @returns A configured Express application.
+ */
+export function createExpressApp(
+    config: MinecraftMcpConfig,
+    transport?: MinecraftHttpServerTransport,
+    port: number = 3000,
+): express.Application {
+    const app = express();
+
+    // Load and configure OpenAPI specification
+    const openApiPath = join(__dirname, 'openapi.json');
+    const openApiSpec = JSON.parse(readFileSync(openApiPath, 'utf8'));
+    openApiSpec.info.version = config.version;
+    openApiSpec.servers = [
+        {
+            url: `http://localhost:${port}`,
+            description: 'Local development server',
+        },
+    ];
+
+    // Configure CORS
+    app.use(cors({
+        origin: '*',
+        methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Mcp-Session-Id', 'Last-Event-Id'],
+        exposedHeaders: ['Mcp-Session-Id'],
+        credentials: false,
+    }));
+
+    // Parse JSON body
+    app.use(express.json());
+
+    // Handle MCP requests if transport is provided
+    if (transport) {
+        app.all('/', async (req, res) => {
+            try {
+                await transport.handleRequest(req, res, req.body);
+            } catch (error) {
+                logger.error('Error handling MCP request:', error);
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+        });
+    }
+
+    // Add routes
+    app.use(createBasicRoutes(config));
+    app.use(createOpenAIRoutes());
+    app.use(createDocsRoutes(openApiSpec));
+
+    // 404 handler
+    app.use((req, res) => {
+        res.status(404).json({ error: 'Not Found' });
+    });
+
+    // Error handler
+    app.use((error: Error, req: express.Request, res: express.Response) => {
+        logger.error('Express error:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    });
+
+    return app;
+}
+
 function createHttpStreamingTransport(config?: HTTPStreamingConfig): MinecraftHttpServerTransport {
     logger.debug('Creating HTTP streaming server transport', { config });
 
@@ -53,49 +121,7 @@ function createHttpServer(
     config: MinecraftMcpConfig,
     port: number = 3000,
 ): HttpServer {
-    const app = express();
-
-    const openApiPath = join(__dirname, 'openapi.json');
-    const openApiSpec = JSON.parse(readFileSync(openApiPath, 'utf8'));
-    openApiSpec.info.version = config.version;
-    openApiSpec.servers = [
-        {
-            url: `http://localhost:${port}`,
-            description: 'Local development server',
-        },
-    ];
-
-    app.use(cors({
-        origin: '*',
-        methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Mcp-Session-Id', 'Last-Event-Id'],
-        exposedHeaders: ['Mcp-Session-Id'],
-        credentials: false,
-    }));
-
-    app.use(express.json());
-
-    app.all('/', async (req, res) => {
-        try {
-            await transport.handleRequest(req, res, req.body);
-        } catch (error) {
-            logger.error('Error handling MCP request:', error);
-            res.status(500).json({ error: 'Internal Server Error' });
-        }
-    });
-
-    app.use(createBasicRoutes(config));
-    app.use(createOpenAIRoutes());
-    app.use(createDocsRoutes(openApiSpec));
-
-    app.use((req, res) => {
-        res.status(404).json({ error: 'Not Found' });
-    });
-
-    app.use((error: Error, req: express.Request, res: express.Response) => {
-        logger.error('Express error:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    });
+    const app = createExpressApp(config, transport, port);
 
     const server = app.listen(port, () => {
         logger.info(`Minecraft MCP server listening on port ${port}`);
@@ -151,7 +177,7 @@ export async function runApplication(config: MinecraftMcpConfig) {
     registerResources(server);
     registerTools(server, config);
 
-    const transportType = process.env.MCP_TRANSPORT || 'http-streaming';
+    const transportType = process.env.MCP_TRANSPORT || 'http';
 
     switch (transportType) {
     case 'stdio':
@@ -170,8 +196,8 @@ export async function runApplication(config: MinecraftMcpConfig) {
 
     case 'sse':
         logger.info('Starting MCP server with SSE transport');
-        const sseApp = express();
-        sseApp.use(cors());
+        const ssePort = 3000;
+        const sseApp = createExpressApp(config, undefined, ssePort);
 
         let sseTransport: SSEServerTransport;
         sseApp.get('/sse', (req, res) => {
@@ -181,8 +207,8 @@ export async function runApplication(config: MinecraftMcpConfig) {
             });
         });
 
-        const sseServer = sseApp.listen(3000, () => {
-            logger.info('MCP SSE server listening on port 3000');
+        const sseServer = sseApp.listen(ssePort, () => {
+            logger.info(`MCP SSE server listening on port ${ssePort}`);
         });
 
         process.on('SIGTERM', () => {
@@ -199,9 +225,9 @@ export async function runApplication(config: MinecraftMcpConfig) {
         });
         break;
 
-    case 'http-streaming':
+    case 'http':
     default:
-        logger.info('Starting MCP server with HTTP streaming transport (default)');
+        logger.info('Starting MCP server with HTTP transport (default)');
         const transport = createHttpStreamingTransport();
         const httpServer = createHttpServer(transport, config);
         const terminationCallback = createServerTerminationCallback(server, transport, httpServer);
