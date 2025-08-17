@@ -149,6 +149,9 @@ function buildApplication() {
                 });
             },
         }],
+        banner: {
+            js: '#!/usr/bin/env node',
+        },
     });
 }
 
