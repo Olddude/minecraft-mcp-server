@@ -26,5 +26,5 @@ ENV GITHUB_TOKEN=${GITHUB_TOKEN}
 RUN scripts/setup.sh
 RUN npm ci
 RUN npm run build
-ENTRYPOINT [ "/bin/bash", "-c" ]
-CMD [ "./scripts/run.sh" ]
+ENTRYPOINT [ "node" ]
+CMD [ "index.js" ]

@@ -31,9 +31,10 @@
     "lint:fix": "npm run lint -- --fix",
     "test:ci": "jest --detectOpenHandles --coverage",
     "test": "npm run test:ci -- --watch",
-    "build": "node -r dotenv/config esbuild.config.mjs",
-    "server": "node -r tsconfig-paths/register -r ts-node/register -r dotenv/config src/server/index.ts",
-    "client": "node -r tsconfig-paths/register -r ts-node/register -r dotenv/config src/client/index.ts"
+    "server:build": "node -r dotenv/config src/server/esbuild.config.mjs",
+    "server:run": "node -r tsconfig-paths/register -r ts-node/register -r dotenv/config src/server/index.ts",
+    "client:build": "node -r dotenv/config src/client/esbuild.config.mjs",
+    "client:run": "node -r tsconfig-paths/register -r ts-node/register -r dotenv/config src/client/index.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.11.4",
