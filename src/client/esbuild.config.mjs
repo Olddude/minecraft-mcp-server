@@ -10,7 +10,7 @@ import esbuild from 'esbuild';
  */
 function createDistDirectory() {
     const workDir = cwd();
-    const clientOutputDirectory = join(workDir, '../../dist/client');
+    const clientOutputDirectory = join(workDir, 'dist/client');
     rmSync(clientOutputDirectory, { recursive: true, force: true });
     mkdirSync(clientOutputDirectory, { recursive: true });
     console.debug('Prepared client dist directory:', clientOutputDirectory);
@@ -21,8 +21,8 @@ function createDistDirectory() {
  */
 function publishPackageJson() {
     const workDir = cwd();
-    const clientOutputDirectory = join(workDir, '../../dist/client');
-    const packageJsonInputFile = join(workDir, '../../package.json');
+    const clientOutputDirectory = join(workDir, 'dist/client');
+    const packageJsonInputFile = join(workDir, 'package.json');
 
     console.debug('Package json input file', packageJsonInputFile);
     const packageJsonOutputText = readFileSync(packageJsonInputFile, { encoding: 'utf-8' });
@@ -51,9 +51,9 @@ function publishPackageJson() {
  */
 function copyTypes() {
     const workDir = cwd();
-    const clientOutputDirectory = join(workDir, '../../dist/client');
+    const clientOutputDirectory = join(workDir, 'dist/client');
 
-    copyFileSync(join(workDir, '../../types.d.ts'), join(clientOutputDirectory, 'types.d.ts'));
+    copyFileSync(join(workDir, 'types.d.ts'), join(clientOutputDirectory, 'types.d.ts'));
     console.debug('Copied types to client directory');
 }
 
@@ -62,8 +62,8 @@ function copyTypes() {
  */
 function copyDocs() {
     const workDir = cwd();
-    const clientDocsDir = join(workDir, '../../dist/client/docs');
-    const srcDir = join(workDir, '../../docs');
+    const clientDocsDir = join(workDir, 'dist/client/docs');
+    const srcDir = join(workDir, 'docs');
 
     mkdirSync(clientDocsDir, { recursive: true });
     cpSync(srcDir, clientDocsDir, { recursive: true, dereference: true });
@@ -75,9 +75,9 @@ function copyDocs() {
  */
 function copyReadme() {
     const workDir = cwd();
-    const clientOutputDirectory = join(workDir, '../../dist/client');
+    const clientOutputDirectory = join(workDir, 'dist/client');
 
-    copyFileSync(join(workDir, '../../README.md'), join(clientOutputDirectory, 'README.md'));
+    copyFileSync(join(workDir, 'README.md'), join(clientOutputDirectory, 'README.md'));
     console.debug('Copied README.md to client directory');
 }
 
@@ -86,9 +86,9 @@ function copyReadme() {
  */
 function copyLicense() {
     const workDir = cwd();
-    const clientOutputDirectory = join(workDir, '../../dist/client');
+    const clientOutputDirectory = join(workDir, 'dist/client');
 
-    copyFileSync(join(workDir, '../../LICENSE'), join(clientOutputDirectory, 'LICENSE'));
+    copyFileSync(join(workDir, 'LICENSE'), join(clientOutputDirectory, 'LICENSE'));
     console.debug('Copied LICENSE to client directory');
 }
 
@@ -97,10 +97,10 @@ function copyLicense() {
  */
 function buildApplication() {
     const workingDirectory = cwd();
-    const clientOutputDirectory = join(workingDirectory, '../../dist/client');
+    const clientOutputDirectory = join(workingDirectory, 'dist/client');
 
     esbuild.build({
-        entryPoints: ['index.ts'],
+        entryPoints: ['src/client/index.ts'],
         bundle: true,
         platform: 'node',
         target: 'node20',
@@ -108,13 +108,13 @@ function buildApplication() {
         outdir: clientOutputDirectory,
         minify: true,
         sourcemap: env.NODE_ENV !== 'production',
-        sourceRoot: join(workingDirectory, '../..'),
+        sourceRoot: workingDirectory,
         treeShaking: true,
         splitting: false, // only works with esm
         legalComments: 'none',
         logLevel: 'info',
         metafile: true,
-        tsconfig: 'tsconfig.app.json',
+        tsconfig: 'src/client/tsconfig.app.json',
         plugins: [{
             name: 'typescript-paths',
             setup(buildContext) {
@@ -132,7 +132,7 @@ function buildApplication() {
                 // Handle path mapping for @/src/* -> ./src/*
                 buildContext.onResolve({ filter: /^@\/src\/.*/ }, (args) => {
                     const path = args.path.replace(/^@\/src\//, './src/');
-                    const fullPath = join(workingDirectory, '../..', path);
+                    const fullPath = join(workingDirectory, path);
                     const resolvedPath = resolveWithExtension(fullPath);
                     return resolvedPath ? { path: resolvedPath } : undefined;
                 });

@@ -3,7 +3,7 @@
 ## JSON RPC
 
 ```bash
-echo '{"jsonrpc": "2.0", "id": "test-1", "method": "tools/call", "params": {"name": "execute-command", "arguments": {"command": "time set day"}}}' | node -r dotenv/config dist/index.js
+echo '{"jsonrpc": "2.0", "id": "test-1", "method": "tools/call", "params": {"name": "execute-command", "arguments": {"command": "time set day"}}}' | node -r dotenv/config dist/server/index.js
 ```
 
 ## Git
