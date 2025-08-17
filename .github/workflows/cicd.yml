@@ -81,7 +81,3 @@ jobs:
       - name: Build
         run: |
           npm run build
-
-      # - name: Run Integration Tests
-      #   run: |
-      #     npm run test:integration

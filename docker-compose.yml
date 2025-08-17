@@ -1,10 +1,11 @@
-version: "3.8"
-
 services:
   server:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: src/server/Dockerfile
+    image: localhost/minecraft-mcp-server:latest
+    container_name: server
+    restart: "no"
     ports:
       - "8080:8080"
     entrypoint: ["node"]
@@ -20,7 +21,10 @@ services:
   client:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: src/client/Dockerfile
+    image: localhost/minecraft-mcp-client:latest
+    container_name: client
+    restart: "no"
     ports:
       - "3000:3000"
     depends_on:

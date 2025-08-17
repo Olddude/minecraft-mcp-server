@@ -14,7 +14,6 @@ export const defaultBotUsername = 'LLMBot';
 export const defaultMcrconHost = defaultMinecraftHost;
 export const defaultMcrconPort = '25575';
 export const defaultMcrconPass = 'minecraft';
-export const defaultClient = false;
 
 /**
  * Parses the package.json file to extract application metadata.
@@ -27,24 +26,11 @@ function parsePackageJson() {
 }
 
 /**
- * Parses command line arguments.
- * @returns Parsed command line arguments.
- */
-function parseCommandLineArgs() {
-    const args = process.argv.slice(2);
-    const client = args.includes('--client') || args.includes('-c');
-    return {
-        client: client,
-    };
-}
-
-/**
  * Creates a configuration object for the application.
  * @returns configuration settings object.
  */
 export function createConfig(): MinecraftMcpConfig {
     const packageJson = parsePackageJson();
-    const args = parseCommandLineArgs();
     return {
         name: packageJson.name,
         description: packageJson.description,
@@ -54,6 +40,5 @@ export function createConfig(): MinecraftMcpConfig {
         mcrconHost: String(process.env.MCRCON_HOST ?? defaultMcrconHost),
         mcrconPort: Number.parseInt(process.env.MCRCON_PORT ?? defaultMcrconPort, defaultParseIntRadix),
         mcrconPass: String(process.env.MCRCON_PASS ?? defaultMcrconPass),
-        client: args.client,
     };
 };

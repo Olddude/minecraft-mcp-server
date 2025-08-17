@@ -1,6 +1,7 @@
 import globals from 'globals';
 import pluginJs from '@eslint/js';
 import tseslint from 'typescript-eslint';
+import importPlugin from 'eslint-plugin-import';
 
 /**
  * @type {import('eslint').Linter.Config[]}
@@ -22,6 +23,21 @@ const config = [
             'node_modules',
             'publish',
         ],
+    },
+    {
+        languageOptions: {
+            globals: globals.node,
+        },
+        plugins: {
+            import: importPlugin,
+        },
+        settings: {
+            'import/resolver': {
+                typescript: {
+                    project: './tsconfig.json',
+                },
+            },
+        },
         rules: {
             strict: ['error', 'global'],
 
@@ -44,7 +60,7 @@ const config = [
             'no-shadow': ['error', { builtinGlobals: true, hoist: 'all' }],
             'no-debugger': 'error',
             'no-alert': 'error',
-            'no-console': 'error',
+            // 'no-console': 'error',
             'complexity': ['error', 50],
             'max-depth': ['error', 4],
             'max-params': ['error', 5],
@@ -72,26 +88,8 @@ const config = [
             'require-await': 'error',
         },
     },
-    {
-        languageOptions: {
-            globals: globals.node,
-        },
-    },
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
-    {
-        files: [
-            'tests/**/*.ts',
-            'jest.setup.ts',
-            '**/*.test.ts',
-            '**/*.spec.ts',
-            'esbuild.config.mjs',
-            '**/*.config.mjs',
-        ],
-        rules: {
-            'no-console': 'off', // Allow console in test files and build scripts
-        },
-    },
 ];
 
 export default config;

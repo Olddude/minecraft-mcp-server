@@ -1,5 +1,5 @@
 {
-  "name": "@olddude/minecraft-mcp-server",
+  "name": "@olddude/minecraft-mcp",
   "version": "0.1.0",
   "main": "index.js",
   "engines": {
@@ -8,7 +8,7 @@
   "license": "Apache-2.0",
   "bin": {
     "mcrcon": "bin/mcrcon",
-    "minecraft-mcp-server": "index.js"
+    "minecraft-mcp": "index.js"
   },
   "types": "types.d.ts",
   "repository": {
@@ -16,7 +16,6 @@
     "url": "git+https://github.com/olddude/minecraft-mcp-server.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
     "@olddude:registry": "https://npm.pkg.github.com"
   },
   "keywords": [
@@ -57,6 +56,8 @@
     "dotenv": "^16.5.0",
     "esbuild": "^0.25.5",
     "eslint": "^9.14.0",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.25.4",
     "globals": "^16.2.0",
     "husky": "^9.1.7",
     "jest": "^29.7.0",

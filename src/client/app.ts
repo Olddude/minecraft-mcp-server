@@ -1,7 +1,7 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import type { MinecraftMcpConfig, MinecraftMcpClient } from '@minecraft-mcp-server/types';
 import { logger } from './logging';
-import { createStdioClientTransport } from '@/src/client/transport/stdio-client';
+import { createStdioClientTransport } from '@/src/client/transport/stdio';
 
 /**
  * Handles process termination signals to gracefully shut down the client.

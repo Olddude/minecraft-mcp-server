@@ -79,7 +79,6 @@ declare module '@minecraft-mcp-server/types' {
   type FaceDirection = 'up' | 'down' | 'north' | 'south' | 'east' | 'west';
 
   type MinecraftMcpConfig = {
-    client: boolean;
     name: string;
     description: string;
     version: string;

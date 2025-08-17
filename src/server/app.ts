@@ -13,7 +13,7 @@ import type {
 import { registerPrompts } from '@/src/server/prompts';
 import { registerResources } from '@/src/server/resources';
 import { registerTools } from '@/src/server/tools';
-import { createStdioServerTransport, patchStdioTransportForTemplates } from '@/src/server/transport/stdio-server';
+import { createStdioServerTransport, patchStdioTransportForTemplates } from '@/src/server/transport/stdio';
 
 /**
  * Handles process termination signals to gracefully shut down the bot and server.
