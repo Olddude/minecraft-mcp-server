@@ -2,7 +2,9 @@ declare module '@minecraft-mcp-server/types' {
   import type { Vec3 } from 'vec3';
   import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
   import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio';
+  import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp';
   import type { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio';
+  import type { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp';
   import type { Client } from '@modelcontextprotocol/sdk/client/index';
 
   /**
@@ -46,9 +48,10 @@ declare module '@minecraft-mcp-server/types' {
   }
 
   type MinecraftMcpClient = Client;
-  type MinecraftClientTransport = StdioClientTransport;
+  type MinecraftClientTransport = StdioClientTransport | StreamableHTTPClientTransport;
   type MinecraftMcpServer = McpServer;
   type MinecraftStdioServerTransport = StdioServerTransport;
+  type MinecraftHttpServerTransport = StreamableHTTPServerTransport;
 
   type TextContent = {
     type: 'text';

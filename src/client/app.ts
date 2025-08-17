@@ -1,7 +1,7 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import type { MinecraftMcpConfig, MinecraftMcpClient } from '@minecraft-mcp-server/types';
 import { logger } from './logging';
-import { createStdioClientTransport } from '@/src/client/transport/stdio';
+import { createHttpClientTransport } from '@/src/client/transport/http';
 
 /**
  * Handles process termination signals to gracefully shut down the client.
@@ -31,7 +31,9 @@ export function createMcpClient(config: MinecraftMcpConfig): MinecraftMcpClient 
  */
 export async function runAsClient(config: MinecraftMcpConfig) {
     const client: MinecraftMcpClient = createMcpClient(config);
-    const transport = createStdioClientTransport();
+    const transport = createHttpClientTransport();
+
+    logger.info('Connecting to MCP server via HTTP streaming...');
     await client.connect(transport, {
         maxTotalTimeout: 10000, // 10 seconds,
         onprogress: (progress) => {
@@ -42,20 +44,26 @@ export async function runAsClient(config: MinecraftMcpConfig) {
         },
         timeout: 5000, // 5 seconds
     });
+
+    logger.info('Connected to MCP server successfully');
+
+    // Execute a test command
     const response = await client.callTool({
         name: 'execute-command',
-        version: '1.0.0',
-        _meta: {
-            mimeType: 'application/json',
-            progressToken: '0',
-        },
         arguments: {
             command: 'time set day',
         },
     });
     logger.info('Tool call response:', response);
+
     const terminationCallback = createClientTerminationCallback(client);
     process.on('SIGTERM', terminationCallback);
-    logger.info('Client started. Waiting for server connection...', client);
-    return;
+    process.on('SIGINT', terminationCallback);
+
+    logger.info('Client started and connected via HTTP streaming');
+
+    // Keep the client running
+    setInterval(() => {
+        logger.debug('Client heartbeat - still connected');
+    }, 30000); // Log every 30 seconds
 }
