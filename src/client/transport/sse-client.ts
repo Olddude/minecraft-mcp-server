@@ -1,6 +1,6 @@
 import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
 import type { MinecraftMcpConfig } from '@minecraft-mcp-server/types';
-import { logger } from '../logging';
+import { logger } from '@/src/client/logging';
 
 export interface SSEClientConfig {
     url: string;

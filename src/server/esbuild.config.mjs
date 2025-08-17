@@ -136,22 +136,6 @@ function buildApplication() {
                     const resolvedPath = resolveWithExtension(fullPath);
                     return resolvedPath ? { path: resolvedPath } : undefined;
                 });
-
-                // Handle path mapping for @/shared/* -> ./src/shared/*
-                buildContext.onResolve({ filter: /^@\/shared\/.*/ }, (args) => {
-                    const path = args.path.replace(/^@\/shared\//, './src/shared/');
-                    const fullPath = join(workingDirectory, '../..', path);
-                    const resolvedPath = resolveWithExtension(fullPath);
-                    return resolvedPath ? { path: resolvedPath } : undefined;
-                });
-
-                // Handle path mapping for @/server/* -> ./src/server/*
-                buildContext.onResolve({ filter: /^@\/server\/.*/ }, (args) => {
-                    const path = args.path.replace(/^@\/server\//, './src/server/');
-                    const fullPath = join(workingDirectory, '../..', path);
-                    const resolvedPath = resolveWithExtension(fullPath);
-                    return resolvedPath ? { path: resolvedPath } : undefined;
-                });
             },
         }],
     });

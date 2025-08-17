@@ -1,6 +1,6 @@
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import type { MinecraftClientTransport } from '@minecraft-mcp-server/types';
-import { logger } from '../logging';
+import { logger } from '@/src/client/logging';
 
 export function createStdioClientTransport(): MinecraftClientTransport {
     logger.debug('Creating STDIO client transport');
@@ -8,10 +8,12 @@ export function createStdioClientTransport(): MinecraftClientTransport {
         command: 'node',
         args: [
             '-r',
-            'dotenv/config',
+            'tsconfig-paths/register',
             '-r',
             'ts-node/register',
-            'index.ts',
+            '-r',
+            'dotenv/config',
+            'src/client/index.ts',
         ],
         cwd: process.cwd(),
         env: process.env as Record<string, string>,
