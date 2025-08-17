@@ -1,3 +1,44 @@
+# GitHub Copilot Instructions
+
+## File Access Restrictions
+
+**IMPORTANT: Do not read or access the following sensitive files:**
+
+- `.env` - Contains sensitive environment variables and secrets
+- `.env.local` - Contains local environment configuration
+- `.env.production` - Contains production environment secrets
+- `.env.development` - Contains development environment secrets
+- Any file with pattern `*.env*` - Environment files may contain sensitive data
+
+## Security Guidelines
+
+1. **Never suggest reading environment files** when users ask about configuration
+2. **Redirect to documentation** instead of examining sensitive files directly
+3. **Use placeholder values** in code suggestions rather than actual credentials
+4. **Remind users to check their own environment files** for proper configuration
+
+## Alternative Approaches
+
+When configuration help is needed:
+
+- Reference the documentation in `README.md`
+- Point to example configurations in comments
+- Suggest checking environment file templates if they exist
+- Use generic placeholder values in suggestions
+
+## Example Safe Responses
+
+Instead of suggesting to read `.env`, suggest:
+
+```
+Check your .env file should contain these variables:
+MCRCON_HOST=localhost
+MCRCON_PORT=25575
+MCRCON_PASS=your_password_here
+```
+
+---
+
 # Minecraft Server Command Instructions
 
 This project provides MCP (Model Context Protocol) tools for executing commands on a Minecraft server via mcrcon. Use these tools to interact with and manage your Minecraft server.
