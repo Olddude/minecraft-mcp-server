@@ -1,8 +1,8 @@
 import type { ResourceTemplate } from '@minecraft-mcp-server/types';
 
-import { buildingTemplates } from './building';
-import { redstoneTemplates } from './redstone';
-import { landscapeTemplates } from './landscape';
+import { buildingTemplates } from '@/src/server/resources/templates/building';
+import { redstoneTemplates } from '@/src/server/resources/templates/redstone';
+import { landscapeTemplates } from '@/src/server/resources/templates/landscape';
 
 /**
  * Get template by name and category

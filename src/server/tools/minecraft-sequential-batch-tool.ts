@@ -1,8 +1,8 @@
 import { z as zod } from 'zod';
 
 import type { MinecraftMcpConfig, McpResponse, MinecraftMcpServer } from '@minecraft-mcp-server/types';
-import { createMcpResponse, createMcpErrorResponse } from '../models/mcp';
-import { minecraftCommandsSequential } from '../helpers/minecraft-commands-sequential';
+import { createMcpResponse, createMcpErrorResponse } from '@/src/server/models/mcp';
+import { minecraftCommandsSequential } from '@/src/server/helpers/minecraft-commands-sequential';
 
 /**
  * Registers the sequential batch command execution tool.

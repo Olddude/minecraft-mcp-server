@@ -1,12 +1,9 @@
-import { createConfig } from './config';
-import { runAsClient } from '@/src/client/app';
+import { createConfig } from '@/src/client/config';
+import { runApplication } from '@/src/client/app';
 
-/**
- * Client application entry point.
- */
 async function main() {
     const config = createConfig();
-    await runAsClient(config);
+    await runApplication(config);
 }
 
 main();

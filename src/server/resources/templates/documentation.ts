@@ -1,6 +1,6 @@
 import type { ResourceTemplate } from '@minecraft-mcp-server/types';
 
-import { getTemplateCategories, getTemplatesByCategory } from './utils';
+import { getTemplateCategories, getTemplatesByCategory } from '@/src/server/resources/templates/utils';
 
 /**
  * Generate template documentation for a single template

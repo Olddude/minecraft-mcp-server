@@ -29,7 +29,7 @@ export function createMcpClient(config: MinecraftMcpConfig): MinecraftMcpClient 
  * Runs the application as Minecraft MCP client based on the provided configuration.
  * @param config The application configuration.
  */
-export async function runAsClient(config: MinecraftMcpConfig) {
+export async function runApplication(config: MinecraftMcpConfig) {
     const client: MinecraftMcpClient = createMcpClient(config);
     const transport = createHttpClientTransport();
 

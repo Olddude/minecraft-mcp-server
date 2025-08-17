@@ -1,8 +1,3 @@
-/**
- * This module provides model context protocol (MCP) server functionality for Minecraft.
- * It allows interaction with a Minecraft server using the Model Context Protocol.
- */
-
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { Server as HttpServer } from 'http';
 import express from 'express';
@@ -20,10 +15,10 @@ import type {
 import { registerPrompts } from '@/src/server/prompts';
 import { registerResources } from '@/src/server/resources';
 import { registerTools } from '@/src/server/tools';
-import { logger } from './logging';
-import { createBasicRoutes } from './routes/basic';
-import { createOpenAIRoutes } from './routes/openai';
-import { createDocsRoutes } from './routes/docs';
+import { logger } from '@/src/server/logging';
+import { createBasicRoutes } from '@/src/server/routes/basic';
+import { createOpenAIRoutes } from '@/src/server/routes/openai';
+import { createDocsRoutes } from '@/src/server/routes/docs';
 
 export interface HTTPStreamingConfig {
     enableJsonResponse?: boolean;
@@ -57,13 +52,16 @@ function createHttpServer(
 ): HttpServer {
     const app = express();
 
-    // Load and configure OpenAPI specification
     const openApiPath = join(__dirname, 'openapi.json');
     const openApiSpec = JSON.parse(readFileSync(openApiPath, 'utf8'));
-    openApiSpec.servers = [{ url: `http://localhost:${port}`, description: 'Local development server' }];
     openApiSpec.info.version = config.version;
+    openApiSpec.servers = [
+        {
+            url: `http://localhost:${port}`,
+            description: 'Local development server',
+        },
+    ];
 
-    // Configure CORS and JSON parsing
     app.use(cors({
         origin: '*',
         methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
@@ -71,8 +69,9 @@ function createHttpServer(
         exposedHeaders: ['Mcp-Session-Id'],
         credentials: false,
     }));
+
     app.use(express.json());
-    // MCP JSON-RPC endpoint at root
+
     app.all('/', async (req, res) => {
         try {
             await transport.handleRequest(req, res, req.body);
@@ -82,16 +81,14 @@ function createHttpServer(
         }
     });
 
-    // Setup all route handlers
     app.use(createBasicRoutes(config));
     app.use(createOpenAIRoutes());
     app.use(createDocsRoutes(openApiSpec));
 
-    // 404 handler for other routes
     app.use((req, res) => {
         res.status(404).json({ error: 'Not Found' });
     });
-    // Error handler
+
     app.use((error: Error, req: express.Request, res: express.Response) => {
         logger.error('Express error:', error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -99,19 +96,6 @@ function createHttpServer(
 
     const server = app.listen(port, () => {
         logger.info(`Minecraft MCP server listening on port ${port}`);
-        logger.info([
-            'Available endpoints:',
-            `  POST   http://localhost:${port}/                    - MCP JSON-RPC protocol`,
-            `  GET    http://localhost:${port}/openapi             - Swagger UI documentation`,
-            `  GET    http://localhost:${port}/openapi.json        - OpenAPI specification`,
-            `  GET    http://localhost:${port}/tools               - List available tools`,
-            `  POST   http://localhost:${port}/tools/execute-command - Execute Minecraft commands`,
-            `  GET    http://localhost:${port}/resources           - List available resources`,
-            `  GET    http://localhost:${port}/prompts             - List available prompts`,
-            `  GET    http://localhost:${port}/health              - Health check`,
-            `  GET    http://localhost:${port}/v1/models           - OpenAI compatible models`,
-            `  POST   http://localhost:${port}/v1/chat/completions - OpenAI compatible chat`,
-        ].join('\n'));
     });
 
     server.on('error', (error) => {
@@ -158,7 +142,7 @@ export function createMcpServer(config: MinecraftMcpConfig): MinecraftMcpServer 
  * Runs the application as Minecraft MCP server based on the provided configuration.
  * @param config The application configuration.
  */
-export async function runAsServer(config: MinecraftMcpConfig) {
+export async function runApplication(config: MinecraftMcpConfig) {
     const server = createMcpServer(config);
     registerPrompts(server);
     registerResources(server);

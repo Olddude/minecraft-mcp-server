@@ -1,7 +1,6 @@
 import log4js from 'log4js';
 import type { Logger, LogLevel, LoggingConfig } from '@minecraft-mcp-server/types';
 
-// Constants for log levels to use in code
 export const LOG_LEVELS = {
     TRACE: 'trace' as LogLevel,
     DEBUG: 'debug' as LogLevel,
@@ -11,9 +10,6 @@ export const LOG_LEVELS = {
     FATAL: 'fatal' as LogLevel,
 };
 
-/**
- * Default logging configuration
- */
 const DEFAULT_CONFIG: LoggingConfig = {
     level: LOG_LEVELS.DEBUG,
     enableConsole: true,
@@ -24,9 +20,6 @@ const DEFAULT_CONFIG: LoggingConfig = {
     compress: true,
 };
 
-/**
- * Initialize the logging system
- */
 function initializeLogging(): void {
     const loggingConfig: LoggingConfig = {
         ...DEFAULT_CONFIG,
@@ -43,7 +36,6 @@ function initializeLogging(): void {
         },
     };
 
-    // Console appender
     if (loggingConfig.enableConsole) {
         appenders.console = {
             type: 'console',
@@ -55,7 +47,6 @@ function initializeLogging(): void {
         categories.default.appenders.push('console');
     }
 
-    // File appender
     if (loggingConfig.enableFile) {
         appenders.file = {
             type: 'dateFile',
@@ -72,7 +63,6 @@ function initializeLogging(): void {
         categories.default.appenders.push('file');
     }
 
-    // Error file appender for errors and above
     if (loggingConfig.enableFile) {
         appenders.errorFile = {
             type: 'dateFile',
@@ -99,23 +89,14 @@ function initializeLogging(): void {
     });
 }
 
-/**
- * Get a logger instance for a specific category
- */
 export function getLogger(category: string = 'default'): Logger {
     return log4js.getLogger(category);
 }
 
-/**
- * Get an error logger that logs to both console and error file
- */
 export function getErrorLogger(): Logger {
     return log4js.getLogger('error');
 }
 
-/**
- * Shutdown the logging system gracefully
- */
 export function shutdownLogging(): Promise<void> {
     return new Promise((resolve) => {
         log4js.shutdown(() => {
@@ -124,8 +105,6 @@ export function shutdownLogging(): Promise<void> {
     });
 }
 
-// Initialize logging when module is loaded
 initializeLogging();
 
-// Export a default logger instance
 export const logger = getLogger('minecraft-mcp-server');

@@ -1,5 +1,5 @@
 import type { MinecraftMcpConfig } from '@minecraft-mcp-server/types';
-import { parsePackageJson } from './helpers/parse-package-json';
+import { parsePackageJson } from '@/src/server/helpers/parse-package-json';
 
 export const defaultParseIntRadix = 10;
 export const defaultMinecraftHost = 'localhost';

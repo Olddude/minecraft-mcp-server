@@ -1,9 +1,9 @@
 import { z as zod } from 'zod';
 
 import type { MinecraftMcpConfig, McpResponse, MinecraftMcpServer } from '@minecraft-mcp-server/types';
-import { createMcpResponse, createMcpErrorResponse } from '../models/mcp';
-import { normalizeCommand } from '../helpers/normalize-command';
-import { minecraftCommand } from '../helpers/minecraft-command';
+import { createMcpResponse, createMcpErrorResponse } from '@/src/server/models/mcp';
+import { normalizeCommand } from '@/src/server/helpers/normalize-command';
+import { minecraftCommand } from '@/src/server/helpers/minecraft-command';
 
 /**
  * Registers the single command execution tool.

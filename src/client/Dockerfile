@@ -1,7 +1,6 @@
 FROM node:22-bookworm-slim
 WORKDIR /minecraft-mcp-server
 ENV DEBIAN_FRONTEND=noninteractive
-# Install GitHub CLI and other dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     git \
@@ -16,13 +15,10 @@ RUN apt-get update && apt-get install -y \
     && apt-get update \
     && apt-get install -y gh \
     && rm -rf /var/lib/apt/lists/*
-
 COPY . .
 RUN chmod +x scripts/*.sh
-
 ARG GITHUB_TOKEN
 ENV GITHUB_TOKEN=${GITHUB_TOKEN}
-
 RUN scripts/setup.sh
 RUN npm ci
 RUN npm run build

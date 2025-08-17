@@ -1,6 +1,6 @@
 import { MinecraftMcpConfig } from '@minecraft-mcp-server/types';
-import { minecraftCommand } from './minecraft-command';
-import { normalizeCommand } from './normalize-command';
+import { minecraftCommand } from '@/src/server/helpers/minecraft-command';
+import { normalizeCommand } from '@/src/server/helpers/normalize-command';
 
 /**
  * Helper function to execute multiple commands in parallel.

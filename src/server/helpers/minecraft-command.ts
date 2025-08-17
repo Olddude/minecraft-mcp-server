@@ -1,5 +1,5 @@
 import { MinecraftMcpConfig } from '@minecraft-mcp-server/types';
-import { normalizeCommand } from './normalize-command';
+import { normalizeCommand } from '@/src/server/helpers/normalize-command';
 import { execSync } from 'node:child_process';
 
 /**

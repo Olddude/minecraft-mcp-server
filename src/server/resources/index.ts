@@ -1,14 +1,9 @@
-/**
- * This module provides MCP resources for Minecraft server management.
- * Resources provide static information and documentation that can be referenced by AI models.
- */
-
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import type { MinecraftMcpServer } from '@minecraft-mcp-server/types';
-import { getAllTemplates } from './templates/utils';
-import { generateTemplateDocumentation } from './templates/documentation';
+import { getAllTemplates } from '@/src/server/resources/templates/utils';
+import { generateTemplateDocumentation } from '@/src/server/resources/templates/documentation';
 
 /**
  * Helper function to load markdown content from a file
@@ -23,7 +18,6 @@ function loadResourcesDocumentation(filename: string): string {
  * Resources provide static information that can be referenced by AI models.
  */
 export function registerResources(server: MinecraftMcpServer): void {
-    // Minecraft Command Reference
     server.resource(
         'minecraft-commands',
         'minecraft://commands',
@@ -36,7 +30,6 @@ export function registerResources(server: MinecraftMcpServer): void {
         }),
     );
 
-    // Building Patterns and Templates
     server.resource(
         'building-patterns',
         'minecraft://building-patterns',
@@ -49,7 +42,6 @@ export function registerResources(server: MinecraftMcpServer): void {
         }),
     );
 
-    // Server Configuration Guide
     server.resource(
         'server-config',
         'minecraft://server-config',
@@ -62,7 +54,6 @@ export function registerResources(server: MinecraftMcpServer): void {
         }),
     );
 
-    // Block and Item Reference
     server.resource(
         'block-reference',
         'minecraft://block-reference',
@@ -75,7 +66,6 @@ export function registerResources(server: MinecraftMcpServer): void {
         }),
     );
 
-    // Resource Templates
     server.resource(
         'resource-templates',
         'minecraft://resource-templates',
@@ -88,7 +78,6 @@ export function registerResources(server: MinecraftMcpServer): void {
         }),
     );
 
-    // Register individual template resources instead of using private handlers
     getAllTemplates().forEach((template) => {
         const templateUri = `minecraft://template/${encodeURIComponent(template.name)}`;
         server.resource(

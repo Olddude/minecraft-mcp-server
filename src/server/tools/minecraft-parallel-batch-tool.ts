@@ -1,8 +1,8 @@
 import { z as zod } from 'zod';
 
 import type { MinecraftMcpConfig, McpResponse, MinecraftMcpServer } from '@minecraft-mcp-server/types';
-import { createMcpResponse, createMcpErrorResponse } from '../models/mcp';
-import { minecraftCommandsParallel } from '../helpers/minecraft-commands-parallel';
+import { createMcpResponse, createMcpErrorResponse } from '@/src/server/models/mcp';
+import { minecraftCommandsParallel } from '@/src/server/helpers/minecraft-commands-parallel';
 
 /**
  * Registers the parallel batch command execution tool.

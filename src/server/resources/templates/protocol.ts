@@ -1,6 +1,6 @@
 import type { JSONRPCRequest, JSONRPCResponse } from '@modelcontextprotocol/sdk/types';
 
-import { getAllTemplates } from './utils';
+import { getAllTemplates } from '@/src/server/resources/templates/utils';
 
 /**
  * Formats all templates for the protocol response.

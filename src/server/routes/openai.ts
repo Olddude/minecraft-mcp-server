@@ -1,6 +1,6 @@
 import type { Router } from 'express';
 import { Router as createRouter } from 'express';
-import { logger } from '../logging';
+import { logger } from '@/src/server/logging';
 
 interface ChatMessage {
     role: string;
