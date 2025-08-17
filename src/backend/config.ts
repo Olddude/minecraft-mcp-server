@@ -1,5 +1,4 @@
 import type { MinecraftMcpConfig } from '@minecraft-mcp-server/types';
-import { parsePackageJson } from '@/src/backend/helpers/parse-package-json';
 
 export const defaultParseIntRadix = 10;
 export const defaultMinecraftHost = 'localhost';
@@ -14,7 +13,11 @@ export const defaultMcrconPass = 'minecraft';
  * @returns configuration settings object.
  */
 export function createConfig(): MinecraftMcpConfig {
-    const packageJson = parsePackageJson();
+    const packageJson = {
+        name: 'minecraft-mcp',
+        description: 'Minecraft Model Context Protocol',
+        version: '0.1.0',
+    };
     return {
         name: packageJson.name,
         description: packageJson.description,
