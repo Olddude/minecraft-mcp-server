@@ -15,7 +15,7 @@ import type {
 import { registerPrompts } from '@/src/backend/prompts';
 import { registerResources } from '@/src/backend/resources';
 import { registerTools } from '@/src/backend/tools';
-import { logger } from '@/src/backend/logging';
+import { logger } from '@/src/shared/logging';
 import { createBasicRoutes } from '@/src/backend/routes/basic';
 import { createOpenAIRoutes } from '@/src/backend/routes/openai';
 import { createDocsRoutes } from '@/src/backend/routes/docs';

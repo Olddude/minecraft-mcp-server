@@ -1,6 +1,6 @@
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import type { MinecraftClientTransport } from '@minecraft-mcp-server/types';
-import { logger } from '@/src/frontend/logging';
+import { logger } from '@/src/shared/logging';
 
 export function createHttpClientTransport(serverUrl: string = 'http://localhost:3000/mcp'): MinecraftClientTransport {
     logger.debug(`Creating HTTP streaming client transport for ${serverUrl}`);

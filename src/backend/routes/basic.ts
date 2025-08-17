@@ -1,7 +1,7 @@
 import type { Router } from 'express';
 import { Router as createRouter } from 'express';
 import type { MinecraftMcpConfig } from '@minecraft-mcp-server/types';
-import { logger } from '@/src/backend/logging';
+import { logger } from '@/src/shared/logging';
 
 export function createBasicRoutes(config: MinecraftMcpConfig): Router {
     const router = createRouter();

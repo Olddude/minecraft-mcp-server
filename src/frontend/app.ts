@@ -1,6 +1,6 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import type { MinecraftMcpConfig, MinecraftMcpClient } from '@minecraft-mcp-server/types';
-import { logger } from './logging';
+import { logger } from '@/src/shared/logging';
 import { createHttpClientTransport } from '@/src/frontend/transport/http';
 
 /**

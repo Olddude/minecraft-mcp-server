@@ -1,4 +1,4 @@
-import { getLogger, logger, getErrorLogger, LOG_LEVELS } from '@/src/backend/logging';
+import { getLogger, logger, getErrorLogger, LOG_LEVELS } from '@/src/shared/logging';
 
 describe('Logging Module', () => {
     beforeEach(() => {
