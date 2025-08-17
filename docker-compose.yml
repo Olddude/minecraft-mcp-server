@@ -2,7 +2,7 @@ services:
   server:
     build:
       context: .
-      dockerfile: src/server/Dockerfile
+      dockerfile: src/backend/Dockerfile
     image: localhost/minecraft-mcp-server:latest
     container_name: server
     restart: "no"
@@ -21,7 +21,7 @@ services:
   client:
     build:
       context: .
-      dockerfile: src/client/Dockerfile
+      dockerfile: src/frontend/Dockerfile
     image: localhost/minecraft-mcp-client:latest
     container_name: client
     restart: "no"
