@@ -2,12 +2,9 @@
   "servers": {
     "minecraft": {
       "command": "npm",
-      "cwd": "${workspaceFolder}",
       "type": "stdio",
-      "args": [
-        "run",
-        "start:backend:debug"
-      ],
+      "cwd": "${workspaceFolder}",
+      "args": ["run", "start:backend:debug"],
       "envFile": "${workspaceFolder}/.env",
       "env": {
         "MCP_TRANSPORT": "stdio"
