@@ -36,7 +36,8 @@
     "start:backend:release": "node -r dotenv/config dist/backend/index.js",
     "start:frontend:debug": "node -r tsconfig-paths/register -r ts-node/register -r dotenv/config src/frontend/index.ts",
     "start:frontend:release": "node -r dotenv/config dist/frontend/index.js",
-    "inspector": "npx @modelcontextprotocol/inspector"
+    "inspector": "npx @modelcontextprotocol/inspector",
+    "clean": "node -r dotenv/config -r tsconfig-paths/register -r ts-node/register scripts/clean.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.11.4",

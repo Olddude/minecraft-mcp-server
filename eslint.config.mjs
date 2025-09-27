@@ -10,8 +10,9 @@ const config = [
     {
         files: [
             'types.d.ts',
-            'src/**/*.ts',
-            'tests/**/*.ts',
+            'apps/**/*.ts',
+            'libs/**/*.ts',
+            'tools/**/*.ts',
             '**/*.mjs',
         ],
     },

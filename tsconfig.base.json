@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
+    "lib": ["ESNext"],
+    "target": "ES2022",
+    "module": "CommonJS",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node", "jest", "types.d.ts"],
+    "paths": {
+      "@/libs/core/*": ["./libs/core/*"]
+    }
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["coverage", "dist", "logs", "modules", "node_modules"]
+}

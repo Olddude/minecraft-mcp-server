@@ -1,11 +1,11 @@
 declare module '@minecraft-mcp-server/types' {
   import type { Vec3 } from 'vec3';
-  import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
-  import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio';
-  import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp';
-  import type { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio';
-  import type { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp';
-  import type { Client } from '@modelcontextprotocol/sdk/client/index';
+  import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+  import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+  import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+  import type { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+  import type { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
+  import type { Client } from '@modelcontextprotocol/sdk/client/index.js';
 
   /**
    * Logger type for consistent logging across the application
@@ -92,4 +92,73 @@ declare module '@minecraft-mcp-server/types' {
     mcrconPass: string;
   };
 
+  /**
+   * Command object structure for JSONL format
+   */
+  type MinecraftCommand = {
+    command: string;
+  };
+
+  /**
+   * Command generator arguments
+   */
+  type CommandGeneratorArgs = {
+    centerX: number;
+    centerY: number;
+    centerZ: number;
+    radius: number;
+    outputFile?: string;
+  };
+
+  /**
+   * Command executor arguments
+   */
+  type CommandExecutorArgs = {
+    inputFile: string;
+    batchSize?: number;
+    delayMs?: number;
+    mcrconPath?: string;
+    verbose?: boolean;
+  };
+
+  /**
+   * Command execution result
+   */
+  type CommandExecutionResult = {
+    command: string;
+    success: boolean;
+    output: string | null;
+    error: string | null;
+    index: number;
+  };
+
+  /**
+   * Command executor options
+   */
+  type ExecutorOptions = {
+    mcrconPath?: string;
+    batchSize?: number;
+    delayMs?: number;
+    verbose?: boolean;
+  };
+
+  /**
+   * CLI Argument types for validation
+   */
+  type CLICommandArgs = {
+    centerX: string;
+    centerY: string;
+    centerZ: string;
+    radius: string;
+    outputFile?: string;
+  };
+
+  type CLIExecutorArgs = {
+    inputFile?: string;
+    batch?: string;
+    delay?: string;
+    mcrcon?: string;
+    verbose?: boolean;
+    help?: boolean;
+  };
 }

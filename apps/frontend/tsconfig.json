@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "../../dist/libs/logging",
+    "types": ["node", "../../types.d.ts"]
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["tests/**/*.spec.ts"]
+}
